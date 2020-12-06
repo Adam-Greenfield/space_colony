@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -24,10 +25,20 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        //modify the distance by the planets radius
+        float sizeFactor = transform.parent.transform.localScale.x / 10;
+
+        Debug.Log(sizeFactor);
+
+        float distanceFromPlanet = distance - sizeFactor;
+        float rotationSpeed = Mathf.Clamp(speed - sizeFactor / 15, 0.1f, float.MaxValue);
+
+        Debug.Log(rotationSpeed);
+
         transform.localPosition = new Vector3(
-            distance * Mathf.Sin(Time.time * speed), // x
+            distanceFromPlanet * Mathf.Sin(Time.time * rotationSpeed), // x
             0.0f, // y
-            distance * Mathf.Cos(Time.time * speed)); // z
+            distanceFromPlanet * Mathf.Cos(Time.time * rotationSpeed)); // z
 
         transform.LookAt(transform.parent);
 
@@ -43,8 +54,6 @@ public class CameraController : MonoBehaviour
                 index = -1;
 
             transform.SetParent(targetTransforms[index + 1]);
-
-            Debug.Log(targetTransforms[index + 1]);
         }
     }
 }
