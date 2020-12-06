@@ -8,10 +8,10 @@ public class CameraController : MonoBehaviour
 {
     float distance = 5.0f;
     float speed = 0.2f;
+    float rotateSpeed = 8.0f;
 
     bool noAutoRotate;
     float inputTimer = 5f;
-    Vector3 currentRotation;
 
     List<Transform> targetTransforms = new List<Transform>();
 
@@ -55,6 +55,8 @@ public class CameraController : MonoBehaviour
         {
             inputTimer = 0;
 
+            transform.RotateAround(transform.parent.transform.position, transform.up, -Input.GetAxis("Mouse X") * rotateSpeed);
+            transform.RotateAround(transform.parent.transform.position, transform.right, -Input.GetAxis("Mouse Y") * rotateSpeed);
         }
 
         if (inputTimer <= 5f)
