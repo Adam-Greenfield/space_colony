@@ -6,8 +6,12 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public float distance = 40.0f;
-    public float speed = 0.2f;
+    float distance = 5.0f;
+    float speed = 0.2f;
+
+    bool noAutoRotate;
+    float inputTimer = 5f;
+    Vector3 currentRotation;
 
     List<Transform> targetTransforms = new List<Transform>();
 
@@ -18,42 +22,55 @@ public class CameraController : MonoBehaviour
         foreach (ICameraTarget target in targets)
         {
             targetTransforms.Add(target.transform);
-            Debug.Log(target.transform);
         }
-        Debug.Log(targetTransforms.Count);
+
+        Debug.Log(targetTransforms[0]);
+
+        SetTotarget(targetTransforms[0]);
     }
 
     void Update()
     {
+        inputTimer += Time.deltaTime;
+
         //modify the distance by the planets radius
         float sizeFactor = transform.parent.transform.localScale.x / 10;
 
-        Debug.Log(sizeFactor);
+        float rotationSpeed = Mathf.Clamp((speed - sizeFactor / 25) * 50, 0.1f, float.MaxValue);
 
-        float distanceFromPlanet = distance - sizeFactor;
-        float rotationSpeed = Mathf.Clamp(speed - sizeFactor / 15, 0.1f, float.MaxValue);
-
-        Debug.Log(rotationSpeed);
-
-        transform.localPosition = new Vector3(
-            distanceFromPlanet * Mathf.Sin(Time.time * rotationSpeed), // x
-            0.0f, // y
-            distanceFromPlanet * Mathf.Cos(Time.time * rotationSpeed)); // z
-
-        transform.LookAt(transform.parent);
 
         if (Input.GetKeyDown("d"))
         {
-
             Transform currentParent = transform.parent.GetComponent<Transform>();
 
             int index = targetTransforms.IndexOf(currentParent);
 
-
             if (index >= targetTransforms.Count - 1)
                 index = -1;
 
-            transform.SetParent(targetTransforms[index + 1]);
+            SetTotarget(targetTransforms[index + 1]);
         }
+
+        if (Input.GetMouseButton(2))
+        {
+            inputTimer = 0;
+
+        }
+
+        if (inputTimer <= 5f)
+            return;
+
+        transform.RotateAround(transform.parent.transform.position, Vector3.up, rotationSpeed * Time.deltaTime);
+
+        transform.LookAt(transform.parent);
+    }
+
+    private void SetTotarget(Transform target)
+    {
+        float distanceFromPlanet = (distance - (target.transform.localScale.x / 10));
+
+        transform.SetParent(target);
+        transform.localPosition = new Vector3(distanceFromPlanet, 0.0f, distanceFromPlanet);
+        transform.LookAt(transform.parent);
     }
 }
