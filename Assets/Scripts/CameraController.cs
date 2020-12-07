@@ -14,7 +14,9 @@ public class CameraController : MonoBehaviour
     public float nearClipPlane = 0.01f;
 
 
-    bool transitioning = false;
+    bool transitioningMove = false;
+    bool transitioningLook = false;
+
 
     List<Transform> targetTransforms = new List<Transform>();
 
@@ -37,10 +39,6 @@ public class CameraController : MonoBehaviour
         inputTimer += Time.deltaTime;
 
         //modify the distance by the planets radius
-        float sizeFactor = transform.parent.transform.localScale.x / 10;
-
-        float rotationSpeed = Mathf.Clamp((speed - sizeFactor / 25) * 50, 0.1f, float.MaxValue);
-
 
         if (Input.GetKeyDown("d"))
         {
@@ -62,16 +60,26 @@ public class CameraController : MonoBehaviour
             transform.RotateAround(transform.parent.transform.position, transform.up, -Input.GetAxis("Mouse X") * rotateSpeed);
             transform.RotateAround(transform.parent.transform.position, transform.right, -Input.GetAxis("Mouse Y") * rotateSpeed);
         }
+    }
+
+    void LateUpdate()
+    {
+
+        float sizeFactor = transform.parent.transform.localScale.x / 10;
+
+        float rotationSpeed = Mathf.Clamp((speed - sizeFactor / 25) * 50, 0.1f, float.MaxValue);
+
+        if (!transitioningLook)
+            transform.LookAt(transform.parent.transform.position);
 
         if (inputTimer <= 5f)
             return;
 
-        if (!transitioning)
-        {
+        if (!transitioningMove)
             transform.RotateAround(transform.parent.transform.position, Vector3.up, rotationSpeed * Time.deltaTime);
-            transform.LookAt(transform.parent.transform.position);
-        }
+        
     }
+
 
     private void SetTotarget(Transform target)
     {
@@ -79,22 +87,22 @@ public class CameraController : MonoBehaviour
 
         transform.SetParent(target);
 
-        transitioning = true;
+        transitioningMove = true;
+        transitioningLook = true;
 
-        LookAt(target, distanceFromPlanet);
-        MoveTo(target, distanceFromPlanet);
+        LookAt(distanceFromPlanet);
+        MoveTo(distanceFromPlanet);
         //TODO do a final lookAt to compensate for target movement during transition
     }
 
-    void LookAt(Transform target, float distanceFromPlanet)
+    void LookAt(float distanceFromPlanet)
     {
         StartCoroutine(LerpLookAt(transform.parent, distanceFromPlanet));
     }
 
-    void MoveTo(Transform target, float distanceFromPlanet)
+    void MoveTo(float distanceFromPlanet)
     {
         StartCoroutine(LerpMoveTo(transform.parent, distanceFromPlanet));
-        transitioning = false;
     }
 
 
@@ -109,22 +117,29 @@ public class CameraController : MonoBehaviour
         
         while (timeElapsed < lerpDuration)
         {
-            transform.rotation = Quaternion.Lerp(startRotation, targetRotation, timeElapsed / lerpDuration);
+            float t = timeElapsed / lerpDuration;
+            t = t * t * (3f - 2f * t);
+
+            transform.rotation = Quaternion.Lerp(startRotation, targetRotation, t);
             timeElapsed += Time.deltaTime;
 
             yield return null;
         }
 
         transform.rotation = targetRotation;
+        transitioningLook = false;
     }
 
     IEnumerator LerpMoveTo(Transform target, float distanceFromPlanet)
     {
         float timeElapsed = 0f;
-        float lerpDuration = 2f;
+        float lerpDuration = 3f;
 
         //divide distance by distance from planet to get a fraction we can use to calculate final vector3 world position to lerp to
         float difference = distanceFromPlanet / Vector3.Distance(target.position, transform.position);
+
+        float sizeFactor = transform.parent.transform.localScale.x / 10;
+        float rotationSpeed = Mathf.Clamp((speed - sizeFactor / 25) * 50, 0.1f, float.MaxValue);
 
         Vector3 targetPosition = Vector3.Lerp(target.position, transform.position, difference);
 
@@ -132,17 +147,40 @@ public class CameraController : MonoBehaviour
         Vector3 localStartPosition = transform.localPosition;
         Vector3 localTargetPosition = target.InverseTransformPoint(targetPosition);
 
-        //TODO change to use loacl positiion and constantly update target to compensate for movement
-
         while (timeElapsed < lerpDuration)
         {
-            transform.localPosition = Vector3.Lerp(localStartPosition, localTargetPosition, timeElapsed / lerpDuration);
+            float t = timeElapsed / lerpDuration;
+            t = t * t * (3f - 2f * t);
+
+            Vector3 zoomCalculationPosition = Vector3.Lerp(localStartPosition, localTargetPosition, t);
+
+     
+
+            if (timeElapsed / lerpDuration >= 0.5f)
+            {
+                //increase the local position by the new rotation
+                //get the local position, then the new position by the rotation, then the new position by the move and calc the difference
+                Vector3 positionBeforeRotation = transform.localPosition;
+                transform.RotateAround(transform.parent.transform.position, Vector3.up, rotationSpeed * Time.deltaTime);
+
+                Vector3 rotationDiff = positionBeforeRotation - transform.localPosition;
+
+
+                transform.localPosition = zoomCalculationPosition + rotationDiff;
+                //TODO start easing in rotation around planet
+            } else
+            {
+                transform.localPosition = zoomCalculationPosition;
+            }
+
+
             timeElapsed += Time.deltaTime;
 
             yield return null;
         }
 
         transform.localPosition = localTargetPosition;
+        transitioningMove = false;
     }
 
 }
