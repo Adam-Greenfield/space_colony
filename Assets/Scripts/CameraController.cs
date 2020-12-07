@@ -6,12 +6,15 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    float distance = 5.0f;
+    float distance = 35.0f;
     float speed = 0.2f;
     float rotateSpeed = 8.0f;
-
-    bool noAutoRotate;
     float inputTimer = 5f;
+    bool noAutoRotate;
+    public float nearClipPlane = 0.01f;
+
+
+    bool transitioning = false;
 
     List<Transform> targetTransforms = new List<Transform>();
 
@@ -41,6 +44,7 @@ public class CameraController : MonoBehaviour
 
         if (Input.GetKeyDown("d"))
         {
+            //TODO handle multiple presses and new targets
             Transform currentParent = transform.parent.GetComponent<Transform>();
 
             int index = targetTransforms.IndexOf(currentParent);
@@ -62,9 +66,11 @@ public class CameraController : MonoBehaviour
         if (inputTimer <= 5f)
             return;
 
-        transform.RotateAround(transform.parent.transform.position, Vector3.up, rotationSpeed * Time.deltaTime);
-
-        transform.LookAt(transform.parent);
+        if (!transitioning)
+        {
+            transform.RotateAround(transform.parent.transform.position, Vector3.up, rotationSpeed * Time.deltaTime);
+            transform.LookAt(transform.parent.transform.position);
+        }
     }
 
     private void SetTotarget(Transform target)
@@ -72,7 +78,71 @@ public class CameraController : MonoBehaviour
         float distanceFromPlanet = (distance - (target.transform.localScale.x / 10));
 
         transform.SetParent(target);
-        transform.localPosition = new Vector3(distanceFromPlanet, 0.0f, distanceFromPlanet);
-        transform.LookAt(transform.parent);
+
+        transitioning = true;
+
+        LookAt(target, distanceFromPlanet);
+        MoveTo(target, distanceFromPlanet);
+        //TODO do a final lookAt to compensate for target movement during transition
     }
+
+    void LookAt(Transform target, float distanceFromPlanet)
+    {
+        StartCoroutine(LerpLookAt(transform.parent, distanceFromPlanet));
+    }
+
+    void MoveTo(Transform target, float distanceFromPlanet)
+    {
+        StartCoroutine(LerpMoveTo(transform.parent, distanceFromPlanet));
+        transitioning = false;
+    }
+
+
+    IEnumerator LerpLookAt(Transform target, float distanceFromPlanet)
+    {
+        float timeElapsed = 0f;
+        float lerpDuration = 0.5f;
+
+        Quaternion startRotation = transform.rotation;
+        Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
+
+        
+        while (timeElapsed < lerpDuration)
+        {
+            transform.rotation = Quaternion.Lerp(startRotation, targetRotation, timeElapsed / lerpDuration);
+            timeElapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        transform.rotation = targetRotation;
+    }
+
+    IEnumerator LerpMoveTo(Transform target, float distanceFromPlanet)
+    {
+        float timeElapsed = 0f;
+        float lerpDuration = 2f;
+
+        //divide distance by distance from planet to get a fraction we can use to calculate final vector3 world position to lerp to
+        float difference = distanceFromPlanet / Vector3.Distance(target.position, transform.position);
+
+        Vector3 targetPosition = Vector3.Lerp(target.position, transform.position, difference);
+
+        //get the target position as a local position of the planet
+        Vector3 localStartPosition = transform.localPosition;
+        Vector3 localTargetPosition = target.InverseTransformPoint(targetPosition);
+
+        //TODO change to use loacl positiion and constantly update target to compensate for movement
+
+        while (timeElapsed < lerpDuration)
+        {
+            transform.localPosition = Vector3.Lerp(localStartPosition, localTargetPosition, timeElapsed / lerpDuration);
+            timeElapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        transform.localPosition = localTargetPosition;
+    }
+
 }
