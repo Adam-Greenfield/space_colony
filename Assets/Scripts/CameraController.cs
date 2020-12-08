@@ -10,7 +10,6 @@ public class CameraController : MonoBehaviour
     float speed = 0.2f;
     float rotateSpeed = 8.0f;
     float inputTimer = 5f;
-    bool noAutoRotate;
     public float nearClipPlane = 0.01f;
 
 
@@ -28,8 +27,6 @@ public class CameraController : MonoBehaviour
         {
             targetTransforms.Add(target.transform);
         }
-
-        Debug.Log(targetTransforms[0]);
 
         SetTotarget(targetTransforms[0]);
     }
