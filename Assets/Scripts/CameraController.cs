@@ -133,7 +133,7 @@ public class CameraController : MonoBehaviour
     IEnumerator LerpMoveTo(Transform target, float distanceFromPlanet)
     {
         float timeElapsed = 0f;
-        float lerpDuration = 3f;
+        float lerpDuration = 2f;
 
         //divide distance by distance from planet to get a fraction we can use to calculate final vector3 world position to lerp to
         float difference = distanceFromPlanet / Vector3.Distance(target.position, transform.position);
@@ -155,21 +155,17 @@ public class CameraController : MonoBehaviour
             Vector3 zoomTarget = Vector3.Lerp(localStartPosition, localTargetPosition, t);
 
     
-            if (timeElapsed / lerpDuration >= 0.5f)
+            if (timeElapsed / lerpDuration >= 0.7f)
             {
                 //increase the local position by the new rotation
                 //get the local position, then the new position by the rotation, then the new position by the move and calc the difference
-                Vector3 currentPosition = transform.localPosition;
-                Vector3 rotationalTarget = GetRotationalLocalPosition(transform.parent.transform.position, Vector3.up, rotationSpeed * Time.deltaTime);
+                Vector3 rotationalTarget = GetRotationalLocalPosition(transform.parent.transform.position, Vector3.up, (rotationSpeed * 2.5f) * Time.deltaTime);
 
-                Vector3 rotationDiff = rotationalTarget - currentPosition;
-
-                Debug.Log(rotationalTarget);
+                Vector3 rotationDiff = rotationalTarget - transform.localPosition;
                 
                 transform.localPosition = zoomTarget + rotationDiff;
                 localStartPosition += rotationDiff;
                 localTargetPosition += rotationDiff;
-                //TODO start easing in rotation around planet
             } else
             {
                 transform.localPosition = zoomTarget;
