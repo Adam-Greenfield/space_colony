@@ -152,25 +152,27 @@ public class CameraController : MonoBehaviour
             float t = timeElapsed / lerpDuration;
             t = t * t * (3f - 2f * t);
 
-            Vector3 zoomCalculationPosition = Vector3.Lerp(localStartPosition, localTargetPosition, t);
+            Vector3 zoomTarget = Vector3.Lerp(localStartPosition, localTargetPosition, t);
 
-     
-
+    
             if (timeElapsed / lerpDuration >= 0.5f)
             {
                 //increase the local position by the new rotation
                 //get the local position, then the new position by the rotation, then the new position by the move and calc the difference
-                Vector3 positionBeforeRotation = transform.localPosition;
-                transform.RotateAround(transform.parent.transform.position, Vector3.up, rotationSpeed * Time.deltaTime);
+                Vector3 currentPosition = transform.localPosition;
+                Vector3 rotationalTarget = GetRotationalLocalPosition(transform.parent.transform.position, Vector3.up, rotationSpeed * Time.deltaTime);
 
-                Vector3 rotationDiff = positionBeforeRotation - transform.localPosition;
+                Vector3 rotationDiff = rotationalTarget - currentPosition;
 
-
-                transform.localPosition = zoomCalculationPosition + rotationDiff;
+                Debug.Log(rotationalTarget);
+                
+                transform.localPosition = zoomTarget + rotationDiff;
+                localStartPosition += rotationDiff;
+                localTargetPosition += rotationDiff;
                 //TODO start easing in rotation around planet
             } else
             {
-                transform.localPosition = zoomCalculationPosition;
+                transform.localPosition = zoomTarget;
             }
 
 
@@ -181,6 +183,16 @@ public class CameraController : MonoBehaviour
 
         transform.localPosition = localTargetPosition;
         transitioningMove = false;
+    }
+
+    private Vector3 GetRotationalLocalPosition(Vector3 point, Vector3 axis, float angle)
+    {
+        Vector3 vector = transform.position;
+        Quaternion rotation = Quaternion.AngleAxis(angle, axis);
+        Vector3 vector2 = vector - point;
+        vector2 = rotation * vector2;
+        vector = point + vector2;
+        return transform.parent.transform.InverseTransformPoint(vector);
     }
 
 }
