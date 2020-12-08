@@ -153,13 +153,12 @@ public class CameraController : MonoBehaviour
             t = t * t * (3f - 2f * t);
 
             Vector3 zoomTarget = Vector3.Lerp(localStartPosition, localTargetPosition, t);
-
     
-            if (timeElapsed / lerpDuration >= 0.7f)
+            if (timeElapsed / lerpDuration >= 0.55f)
             {
                 //increase the local position by the new rotation
                 //get the local position, then the new position by the rotation, then the new position by the move and calc the difference
-                Vector3 rotationalTarget = GetRotationalLocalPosition(transform.parent.transform.position, Vector3.up, (rotationSpeed * 2.5f) * Time.deltaTime);
+                Vector3 rotationalTarget = GetRotationalLocalPosition(transform.parent.transform.position, Vector3.up, (rotationSpeed * t) * Time.deltaTime);
 
                 Vector3 rotationDiff = rotationalTarget - transform.localPosition;
                 
