@@ -7,7 +7,12 @@ public class Planet : MonoBehaviour, ICameraTarget
     [Range(2,256)]
     public int resolution = 10;
 
+    public ShapeSettings shapeSettings;
+    public ColorSettings colorSettings;
+
     private int _distanceFromCore;
+
+    ShapeGenerator shapeGenerator;
 
     [SerializeField, HideInInspector]
     MeshFilter[] meshFilters;
@@ -15,14 +20,15 @@ public class Planet : MonoBehaviour, ICameraTarget
 
     private void OnValidate()
     {
-        Initialize();
-        GenerateMesh();
+        GeneratePlanet();
     }
 
     public int distanceFromCore { get { return _distanceFromCore; } set { _distanceFromCore = value; } }
 
     void Initialize()
     {
+        shapeGenerator = new ShapeGenerator(shapeSettings);
+
         if (meshFilters == null || meshFilters.Length == 0)
         {
             meshFilters = new MeshFilter[6];
@@ -43,7 +49,7 @@ public class Planet : MonoBehaviour, ICameraTarget
                 meshFilters[i].sharedMesh = new Mesh();
             }
 
-            terrainFaces[i] = new TerrainFace(meshFilters[i].sharedMesh, resolution, directions[i]);
+            terrainFaces[i] = new TerrainFace(shapeGenerator, meshFilters[i].sharedMesh, resolution, directions[i]);
         }
     }
 
@@ -53,6 +59,33 @@ public class Planet : MonoBehaviour, ICameraTarget
         {
             face.ConstructMesh();
         }
+    }
+
+    void GenerateColor()
+    {
+        foreach (MeshFilter meshFiler in meshFilters)
+        {
+            meshFiler.GetComponent<MeshRenderer>().sharedMaterial.color = colorSettings.planetColor;
+        }
+    }
+
+    public void GeneratePlanet()
+    {
+        Initialize();
+        GenerateMesh();
+        GenerateColor();
+    }
+
+    public void OnShapeSettingsUpdated()
+    {
+        Initialize();
+        GenerateMesh();
+    }
+
+    public void OnColorSettignsUpdated()
+    {
+        Initialize();
+        GenerateColor();
     }
 
     // Start is called before the first frame update
