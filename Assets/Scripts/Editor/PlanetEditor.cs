@@ -1,39 +1,55 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
+using UnityEngine; 
 
 [CustomEditor(typeof(Planet))]
 public class PlanetEditor : Editor
 {
 
+    Editor shapeEditor;
+    Editor colorEditor; 
     Planet planet;
 
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
+        using (var check = new EditorGUI.ChangeCheckScope())
+        {
+            base.OnInspectorGUI();
 
-        DrawSettingsEditor(planet.shapeSettings, planet.OnShapeSettingsUpdated);
-        DrawSettingsEditor(planet.colorSettings, planet.OnColorSettingsUpdated);
+            if (check.changed)
+                planet.GeneratePlanet();
+        }
+
+        if (GUILayout.Button("Generate Planet"))
+                planet.GeneratePlanet();
+
+
+        DrawSettingsEditor(planet.shapeSettings, planet.OnShapeSettingsUpdated, ref planet.shapeSettingsFoldout, ref shapeEditor);
+        DrawSettingsEditor(planet.colorSettings, planet.OnColorSettingsUpdated, ref planet.colorSettingsFoldout, ref colorEditor);
         
     }
          
 
-    void DrawSettingsEditor(Object settings, System.Action onSettingsUpdated)
+    void DrawSettingsEditor(Object settings, System.Action onSettingsUpdated, ref bool foldout, ref Editor editor)
     {
-        using (var check = new EditorGUI.ChangeCheckScope())
+        if (settings != null)
         {
-            Editor editor = CreateEditor(settings);
-            editor.OnInspectorGUI();
-
-            if(check.changed && onSettingsUpdated != null)
+            foldout = EditorGUILayout.InspectorTitlebar(foldout, settings);
+            using (var check = new EditorGUI.ChangeCheckScope())
             {
-                onSettingsUpdated();
+                if (foldout)
+                {
+                    CreateCachedEditor(settings, null, ref editor);
+                    editor.OnInspectorGUI();
+
+                    if(check.changed && onSettingsUpdated != null)
+                    {
+                        onSettingsUpdated();
+                    }
+                }
             }
         }
-
-
-
     }
 
     private void OnEnable()

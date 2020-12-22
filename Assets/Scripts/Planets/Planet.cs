@@ -6,9 +6,16 @@ public class Planet : MonoBehaviour, ICameraTarget
 {
     [Range(2,256)]
     public int resolution = 10;
+    public bool autoUpdate = true;
 
     public ShapeSettings shapeSettings;
     public ColorSettings colorSettings;
+
+    [HideInInspector]
+    public bool shapeSettingsFoldout;
+
+    [HideInInspector]
+    public bool colorSettingsFoldout;
 
     private int _distanceFromCore;
 
@@ -78,14 +85,20 @@ public class Planet : MonoBehaviour, ICameraTarget
 
     public void OnShapeSettingsUpdated()
     {
-        Initialize();
-        GenerateMesh();
+        if (autoUpdate)
+        {
+            Initialize();
+            GenerateMesh();
+        }
     }
 
     public void OnColorSettingsUpdated()
     {
-        Initialize();
-        GenerateColor();
+        if (autoUpdate)
+        {
+            Initialize();
+            GenerateColor();
+        }
     }
 
     // Start is called before the first frame update
