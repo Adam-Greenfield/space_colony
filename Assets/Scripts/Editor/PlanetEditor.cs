@@ -13,16 +13,27 @@ public class PlanetEditor : Editor
     {
         base.OnInspectorGUI();
 
-        DrawSettingsEditor(planet.shapeSettings);
-        DrawSettingsEditor(planet.colorSettings);
+        DrawSettingsEditor(planet.shapeSettings, planet.OnShapeSettingsUpdated);
+        DrawSettingsEditor(planet.colorSettings, planet.OnColorSettingsUpdated);
         
     }
          
 
-    void DrawSettingsEditor(Object settings)
+    void DrawSettingsEditor(Object settings, System.Action onSettingsUpdated)
     {
-        Editor editor = CreateEditor(settings);
-        editor.OnInspectorGUI();
+        using (var check = new EditorGUI.ChangeCheckScope())
+        {
+            Editor editor = CreateEditor(settings);
+            editor.OnInspectorGUI();
+
+            if(check.changed && onSettingsUpdated != null)
+            {
+                onSettingsUpdated();
+            }
+        }
+
+
+
     }
 
     private void OnEnable()

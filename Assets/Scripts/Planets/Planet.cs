@@ -82,7 +82,7 @@ public class Planet : MonoBehaviour, ICameraTarget
         GenerateMesh();
     }
 
-    public void OnColorSettignsUpdated()
+    public void OnColorSettingsUpdated()
     {
         Initialize();
         GenerateColor();
