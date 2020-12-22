@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\ICameraTarget.cs" />
     <Compile Include="Assets\Scripts\Planets\Planet.cs" />
+    <Compile Include="Assets\Scripts\Planets\TerrainFace.cs" />
     <Reference Include="UnityEngine">
       <HintPath>D:/Unity/2019.3.13f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
