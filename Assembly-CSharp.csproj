@@ -42,6 +42,7 @@
      <Compile Include="Assets\Scripts\NoiseFilter.cs" />
      <Compile Include="Assets\Scripts\Planets\Planet.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\ColorSettings.cs" />
+     <Compile Include="Assets\Scripts\Planets\Settings\NoiseSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\ShapeSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\ShapeGenerator.cs" />
      <Compile Include="Assets\Scripts\Planets\TerrainFace.cs" />
