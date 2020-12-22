@@ -40,7 +40,8 @@ public class TerrainFace
                 //get point on face by working out values along axisA and axisB
                 Vector3 pointOnUnitCube = localUp + (percent.x - .5f) * 2 * axisA + (percent.y - .5f) * 2 * axisB;
                 //add to verticies
-                verticies[i] = pointOnUnitCube;
+                Vector3 pointOnUnitSphere = pointOnUnitCube.normalized;
+                verticies[i] = pointOnUnitSphere;
 
                 //don't do this for bottom and right face, as the triangles would extend out the mesh
                 if (x != resolution -1 && y != resolution -1)
