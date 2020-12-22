@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 470d9535383de2b8f9d95ec518f01eb3, type: 3}
-  m_Name: New Color Settings
+  m_Name: Color
   m_EditorClassIdentifier: 
-  planetColor: {r: 0, g: 0, b: 0, a: 0}
+  planetColor: {r: 0.4014329, g: 0.50568324, b: 0.8773585, a: 0}
