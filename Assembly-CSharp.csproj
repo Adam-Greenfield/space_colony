@@ -38,6 +38,8 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\ICameraTarget.cs" />
+     <Compile Include="Assets\Scripts\Noise.cs" />
+     <Compile Include="Assets\Scripts\NoiseFilter.cs" />
      <Compile Include="Assets\Scripts\Planets\Planet.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\ColorSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\ShapeSettings.cs" />
