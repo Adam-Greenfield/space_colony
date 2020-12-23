@@ -5,6 +5,10 @@ using UnityEngine;
 [System.Serializable]
 public class NoiseSettings
 {
+
+    public enum FilterType {Simple,Rigid}
+    public FilterType filterType;
+
     [Range(1,8)]
     public int numLayers = 1;
     public float strength = 1;
