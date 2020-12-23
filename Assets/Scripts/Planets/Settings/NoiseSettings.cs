@@ -5,8 +5,13 @@ using UnityEngine;
 [System.Serializable]
 public class NoiseSettings
 {
+    [Range(1,8)]
+    public int numLayers = 1;
     public float strength = 1;
-    public float roughness = 1;
+    public float baseRoughness = 1;
+    public float roughness = 2;
+    public float persistance = .5f;
     public Vector3 center;
+    public float minValue;
 
 }
