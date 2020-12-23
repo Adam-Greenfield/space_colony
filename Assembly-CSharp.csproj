@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\CameraController.cs" />
+     <Compile Include="Assets\Scripts\ConditionalHideAttribute.cs" />
      <Compile Include="Assets\Scripts\ICameraTarget.cs" />
      <Compile Include="Assets\Scripts\INoiseFilter.cs" />
      <Compile Include="Assets\Scripts\Noise.cs" />

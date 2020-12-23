@@ -13,7 +13,67 @@ MonoBehaviour:
   m_Name: PlanetShape
   m_EditorClassIdentifier: 
   planetRadius: 2.04
-  noiseSettings:
-    strength: 0.78
-    roughness: 1.21
-    center: {x: 1.28, y: 2, z: 4}
+  noiseLayers:
+  - enabled: 1
+    useFirstLayerAsMask: 0
+    noiseSettings:
+      filterType: 0
+      simpleNoiseSettings:
+        numLayers: 3
+        strength: 0.08
+        baseRoughness: 0.98
+        roughness: 2.78
+        persistance: 0.17
+        center: {x: 0, y: 0, z: 0}
+        minValue: 0.52
+      rigidNoiseSettings:
+        numLayers: 1
+        strength: 1
+        baseRoughness: 1
+        roughness: 2
+        persistance: 0.5
+        center: {x: 0, y: 0, z: 0}
+        minValue: 0
+        weightMultiplier: 0.8
+  - enabled: 1
+    useFirstLayerAsMask: 1
+    noiseSettings:
+      filterType: 0
+      simpleNoiseSettings:
+        numLayers: 5
+        strength: 2
+        baseRoughness: 0.84
+        roughness: 1.79
+        persistance: 1
+        center: {x: 0, y: 0, z: 0}
+        minValue: 3
+      rigidNoiseSettings:
+        numLayers: 1
+        strength: 1
+        baseRoughness: 1
+        roughness: 2
+        persistance: 0.5
+        center: {x: 0, y: 0, z: 0}
+        minValue: 0
+        weightMultiplier: 0.8
+  - enabled: 1
+    useFirstLayerAsMask: 1
+    noiseSettings:
+      filterType: 1
+      simpleNoiseSettings:
+        numLayers: 1
+        strength: 1
+        baseRoughness: 1
+        roughness: 2
+        persistance: 0.5
+        center: {x: 0, y: 0, z: 0}
+        minValue: 0
+      rigidNoiseSettings:
+        numLayers: 5
+        strength: 2
+        baseRoughness: 1
+        roughness: 1.4
+        persistance: 1.1
+        center: {x: 0, y: 0, z: 0}
+        minValue: 2
+        weightMultiplier: 1.8
