@@ -22,7 +22,8 @@ public class Planet : MonoBehaviour, ICameraTarget
 
     private int _distanceFromCore;
 
-    ShapeGenerator shapeGenerator;
+    ColorGenerator colorGenerator = new ColorGenerator();
+    ShapeGenerator shapeGenerator = new ShapeGenerator();
 
     [SerializeField, HideInInspector]
     MeshFilter[] meshFilters;
@@ -37,7 +38,8 @@ public class Planet : MonoBehaviour, ICameraTarget
 
     void Initialize()
     {
-        shapeGenerator = new ShapeGenerator(shapeSettings);
+        colorGenerator.UpdateSettings(colorSettings);
+        shapeGenerator.UpdateSettings(shapeSettings);
 
         if (meshFilters == null || meshFilters.Length == 0)
         {
@@ -54,10 +56,12 @@ public class Planet : MonoBehaviour, ICameraTarget
                 GameObject meshObj = new GameObject("mesh");
                 meshObj.transform.parent = transform;
 
-                meshObj.AddComponent<MeshRenderer>().sharedMaterial = new Material(Shader.Find("Standard"));
+                meshObj.AddComponent<MeshRenderer>();
                 meshFilters[i] = meshObj.AddComponent<MeshFilter>();
                 meshFilters[i].sharedMesh = new Mesh();
             }
+
+            meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial = colorSettings.planetMaterial;
 
             terrainFaces[i] = new TerrainFace(shapeGenerator, meshFilters[i].sharedMesh, resolution, directions[i]);
             bool renderFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
@@ -72,14 +76,12 @@ public class Planet : MonoBehaviour, ICameraTarget
             if(meshFilters[i].gameObject.activeSelf)
                 terrainFaces[i].ConstructMesh();
         }
+        colorGenerator.UpdateElevation(shapeGenerator.elevationMinMax);
     }
 
     void GenerateColor()
     {
-        foreach (MeshFilter meshFiler in meshFilters)
-        {
-            meshFiler.GetComponent<MeshRenderer>().sharedMaterial.color = colorSettings.planetColor;
-        }
+        colorGenerator.UpdateColors();
     }
 
     public void GeneratePlanet()
