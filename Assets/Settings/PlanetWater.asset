@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   elevation: 0
   color: {r: 0, g: 0, b: 0, a: 0}
-  waterMaterial: {fileID: 0}
+  waterMaterial: {fileID: 2100000, guid: 43e3261a7b90a0bccab26f57e34cf71e, type: 2}

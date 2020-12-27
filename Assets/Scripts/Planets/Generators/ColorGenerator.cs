@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ColorGenerator
 {
-
     ColorSettings settings;
     Texture2D texture;
     const int textureResolution = 50;

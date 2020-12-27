@@ -14,6 +14,9 @@ public class WaterGenerator : IFaceGenerator
 
     public Vector3 CalculatePointOnPlanet(Vector3 pointOnUnitSphere)
     {
-        return new Vector3();
+        float elevation = settings.elevation;
+
+        elevation = settings.planetRadius * ( 1 + elevation / 10f);
+        return pointOnUnitSphere * elevation;
     }
 }

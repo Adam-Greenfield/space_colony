@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1d1b67994ada0caba8ea8ace763f815, type: 3}
   m_Name: PlanetShape
   m_EditorClassIdentifier: 
-  planetRadius: 2.04
   noiseLayers:
   - enabled: 1
     useFirstLayerAsMask: 0
@@ -20,7 +19,7 @@ MonoBehaviour:
       filterType: 0
       simpleNoiseSettings:
         numLayers: 3
-        strength: 0.08
+        strength: 0.09
         baseRoughness: 0.98
         roughness: 2.78
         persistance: 0.17
@@ -71,7 +70,7 @@ MonoBehaviour:
       rigidNoiseSettings:
         numLayers: 5
         strength: 2
-        baseRoughness: 1
+        baseRoughness: 1.1
         roughness: 1.4
         persistance: 1.1
         center: {x: 0, y: 0, z: 0}

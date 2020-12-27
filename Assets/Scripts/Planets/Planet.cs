@@ -20,7 +20,7 @@ public class Planet : MonoBehaviour, ICameraTarget
 
     [HideInInspector]
     public bool colorSettingsFoldout;
-    
+
     [HideInInspector]
     public bool waterSettingsFoldout;
 
@@ -81,9 +81,9 @@ public class Planet : MonoBehaviour, ICameraTarget
 
             GenerateMeshBase(planetMeshFilters.water, i, directions, waterSettings.waterMaterial);
 
-            waterFaces[i] = new WaterFace(waterGenerator, planetMeshFilters.terrain[i].sharedMesh, resolution, directions[i]);
+            waterFaces[i] = new WaterFace(waterGenerator, planetMeshFilters.water[i].sharedMesh, resolution, directions[i]);
             bool renderWaterFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
-            planetMeshFilters.terrain[i].gameObject.SetActive(renderWaterFace);
+            planetMeshFilters.water[i].gameObject.SetActive(renderWaterFace);
         }
     }
 
