@@ -70,7 +70,6 @@ public class TerrainFace
         mesh.vertices = verticies;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
-        //TODO create water texture above terrain absed on lowest values
     }
 
 

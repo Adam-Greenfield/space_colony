@@ -13,6 +13,7 @@ public class Planet : MonoBehaviour, ICameraTarget
 
     public ShapeSettings shapeSettings;
     public ColorSettings colorSettings;
+    public WaterSettings waterSettings;
 
     [HideInInspector]
     public bool shapeSettingsFoldout;
@@ -65,27 +66,28 @@ public class Planet : MonoBehaviour, ICameraTarget
 
         for (int i = 0; i < 6; i++)
         {
-            GenerateMeshBase(planetMeshFilters.terrain, i, directions);
+            GenerateMeshBase(planetMeshFilters.terrain, i, directions, colorSettings.planetMaterial);
+            GenerateMeshBase(planetMeshFilters.water, i, directions, waterSettings.waterMaterial);
         }
     }
 
-    private void GenerateMeshBase(MeshFilter[] filters, int i, Vector3[] directions)
+    private void GenerateMeshBase(MeshFilter[] filters, int i, Vector3[] directions, Material material)
     {
-            if(filters[i] == null)
-            {
-                GameObject terrainMeshObj = new GameObject("mesh");
-                terrainMeshObj.transform.parent = transform;
+        if(filters[i] == null)
+        {
+            GameObject terrainMeshObj = new GameObject("mesh");
+            terrainMeshObj.transform.parent = transform;
 
-                terrainMeshObj.AddComponent<MeshRenderer>();
-                filters[i] = terrainMeshObj.AddComponent<MeshFilter>();
-                filters[i].sharedMesh = new Mesh();
-            }
+            terrainMeshObj.AddComponent<MeshRenderer>();
+            filters[i] = terrainMeshObj.AddComponent<MeshFilter>();
+            filters[i].sharedMesh = new Mesh();
+        }
 
-            filters[i].GetComponent<MeshRenderer>().sharedMaterial = colorSettings.planetMaterial;
+        filters[i].GetComponent<MeshRenderer>().sharedMaterial = material;
 
-            terrainFaces[i] = new TerrainFace(shapeGenerator, filters[i].sharedMesh, resolution, directions[i]);
-            bool renderFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
-            filters[i].gameObject.SetActive(renderFace);
+        terrainFaces[i] = new TerrainFace(shapeGenerator, filters[i].sharedMesh, resolution, directions[i]);
+        bool renderFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
+        filters[i].gameObject.SetActive(renderFace);
     }
 
     void GenerateMesh()
@@ -103,11 +105,21 @@ public class Planet : MonoBehaviour, ICameraTarget
         colorGenerator.UpdateColors();
     }
 
+    void GenerateWater()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if(planetMeshFilters.water[i].gameObject.activeSelf)
+                terrainFaces[i].ConstructMesh();
+        }
+    }
+
     public void GeneratePlanet()
     {
         Initialize();
         GenerateMesh();
         GenerateColor();
+        GenerateWater();
     }
 
     public void OnShapeSettingsUpdated()

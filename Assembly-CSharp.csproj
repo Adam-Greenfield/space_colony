@@ -45,12 +45,14 @@
      <Compile Include="Assets\Scripts\NoiseFilterFactory.cs" />
      <Compile Include="Assets\Scripts\Planets\MinMax.cs" />
      <Compile Include="Assets\Scripts\Planets\Planet.cs" />
+     <Compile Include="Assets\Scripts\Planets\PlanetFace.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\ColorSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\NoiseSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\ShapeSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\WaterSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\ShapeGenerator.cs" />
      <Compile Include="Assets\Scripts\Planets\TerrainFace.cs" />
+     <Compile Include="Assets\Scripts\Planets\WaterFace.cs" />
      <Compile Include="Assets\Scripts\Planets\WaterGenerator.cs" />
      <Compile Include="Assets\Scripts\RigidNoiseFilter.cs" />
      <Compile Include="Assets\Scripts\SimpleNoiseFilter.cs" />
