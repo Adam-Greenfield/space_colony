@@ -20,6 +20,9 @@ public class Planet : MonoBehaviour, ICameraTarget
 
     [HideInInspector]
     public bool colorSettingsFoldout;
+    
+    [HideInInspector]
+    public bool waterSettingsFoldout;
 
     private int _distanceFromCore;
 
@@ -51,6 +54,7 @@ public class Planet : MonoBehaviour, ICameraTarget
     {
         colorGenerator.UpdateSettings(colorSettings);
         shapeGenerator.UpdateSettings(shapeSettings);
+        waterGenerator.UpdateSettings(waterSettings);
 
         if (planetMeshFilters.terrain == null || planetMeshFilters.terrain.Length == 0)
         {
@@ -98,7 +102,7 @@ public class Planet : MonoBehaviour, ICameraTarget
         filters[i].GetComponent<MeshRenderer>().sharedMaterial = material;
     }
 
-    void GenerateMesh()
+    void GenerateTerrain()
     {
         for (int i = 0; i < 6; i++)
         {
@@ -118,14 +122,14 @@ public class Planet : MonoBehaviour, ICameraTarget
         for (int i = 0; i < 6; i++)
         {
             if(planetMeshFilters.water[i].gameObject.activeSelf)
-                terrainFaces[i].ConstructMesh();
+                waterFaces[i].ConstructMesh();
         }
     }
 
     public void GeneratePlanet()
     {
         Initialize();
-        GenerateMesh();
+        GenerateTerrain();
         GenerateColor();
         GenerateWater();
     }
@@ -135,7 +139,7 @@ public class Planet : MonoBehaviour, ICameraTarget
         if (autoUpdate)
         {
             Initialize();
-            GenerateMesh();
+            GenerateTerrain();
         }
     }
 
@@ -145,6 +149,15 @@ public class Planet : MonoBehaviour, ICameraTarget
         {
             Initialize();
             GenerateColor();
+        }
+    }
+
+    public void OnWaterSettingsUpdated()
+    {
+        if (autoUpdate)
+        {
+            Initialize();
+            GenerateWater();
         }
     }
 
