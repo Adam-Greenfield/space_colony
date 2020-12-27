@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class PlanetFace
 {
-    ShapeGenerator shapeGenerator;
+    IFaceGenerator generator;
     Mesh mesh;
     int resolution;
     Vector3 localUp;
     Vector3 axisA;
     Vector3 axisB;
 
-    public PlanetFace(ShapeGenerator shapeGenerator, Mesh mesh, int resolution, Vector3 localUp)
+    public PlanetFace(IFaceGenerator generator, Mesh mesh, int resolution, Vector3 localUp)
     {
-        this.shapeGenerator = shapeGenerator;
+        this.generator = generator;
         this.mesh = mesh;
         this.resolution = resolution;
         this.localUp = localUp;
@@ -44,7 +44,7 @@ public class PlanetFace
                 //add to verticies
                 Vector3 pointOnUnitSphere = pointOnUnitCube.normalized;
                 //pass in delegate to do this
-                verticies[i] = shapeGenerator.CalculatePointOnPlanet(pointOnUnitSphere);
+                verticies[i] = generator.CalculatePointOnPlanet(pointOnUnitSphere);
 
                 //don't do this for bottom and right face, as the triangles would extend out the mesh
                 if (x != resolution -1 && y != resolution -1)

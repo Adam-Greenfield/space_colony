@@ -2,17 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaterFace : MonoBehaviour
+public class WaterFace : PlanetFace
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public WaterFace(WaterGenerator waterGenerator, Mesh mesh, int resolution, Vector3 localUp)
+        : base(waterGenerator, mesh, resolution, localUp){}
 }
