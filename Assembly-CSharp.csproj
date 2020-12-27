@@ -37,23 +37,25 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\CameraController.cs" />
-     <Compile Include="Assets\Scripts\ColorGenerator.cs" />
      <Compile Include="Assets\Scripts\ConditionalHideAttribute.cs" />
      <Compile Include="Assets\Scripts\ICameraTarget.cs" />
      <Compile Include="Assets\Scripts\INoiseFilter.cs" />
      <Compile Include="Assets\Scripts\Noise.cs" />
      <Compile Include="Assets\Scripts\NoiseFilterFactory.cs" />
+     <Compile Include="Assets\Scripts\Planets\Generators\ColorGenerator.cs" />
+     <Compile Include="Assets\Scripts\Planets\Generators\IFaceGenerator.cs" />
+     <Compile Include="Assets\Scripts\Planets\Generators\ShapeGenerator.cs" />
+     <Compile Include="Assets\Scripts\Planets\Generators\WaterGenerator.cs" />
      <Compile Include="Assets\Scripts\Planets\MinMax.cs" />
      <Compile Include="Assets\Scripts\Planets\Planet.cs" />
      <Compile Include="Assets\Scripts\Planets\PlanetFace.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\ColorSettings.cs" />
+     <Compile Include="Assets\Scripts\Planets\Settings\IFaceSetting.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\NoiseSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\ShapeSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\WaterSettings.cs" />
-     <Compile Include="Assets\Scripts\Planets\ShapeGenerator.cs" />
      <Compile Include="Assets\Scripts\Planets\TerrainFace.cs" />
      <Compile Include="Assets\Scripts\Planets\WaterFace.cs" />
-     <Compile Include="Assets\Scripts\Planets\WaterGenerator.cs" />
      <Compile Include="Assets\Scripts\RigidNoiseFilter.cs" />
      <Compile Include="Assets\Scripts\SimpleNoiseFilter.cs" />
      <Compile Include="Assets\Scripts\SystemGenerator.cs" />
