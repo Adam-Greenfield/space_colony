@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlanetFace
 {
     IFaceGenerator generator;
-    Mesh mesh;
+    protected Mesh mesh;
     int resolution;
     Vector3 localUp;
     Vector3 axisA;
@@ -24,7 +24,7 @@ public class PlanetFace
         axisB = Vector3.Cross(localUp, axisA);
     }
 
-    public void ConstructMesh()
+    public virtual void ConstructMesh()
     {
         Vector3[] verticies = new Vector3[resolution * resolution];
         //work out how many triangles will make up the face considering resolution
@@ -73,4 +73,22 @@ public class PlanetFace
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
     }
+
+    // public void UpdateUVs()
+    // {
+    //     Vector2[] uv = new Vector2[resolution * resolution];
+
+    //     for (int y = 0; y < resolution; y++)
+    //     {
+    //         for (int x = 0; x < resolution; x++)
+    //         {
+    //             int i = x * y * resolution;
+    //             Vector2 percent = new Vector2(x, y) / (resolution - 1);
+    //             Vector3 pointOnUnitCube = localUp + (percent.x - .5f) * 2 * axisA + (percent.y - .5f) * 2 * axisB;
+    //             Vector3 pointOnUnitSphere = pointOnUnitCube.normalized;
+
+    //             uv[i] = new Vector2()
+    //         }
+    //     }
+    // }
 }
