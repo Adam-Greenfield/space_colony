@@ -28,7 +28,7 @@ public class ColorGenerator
         {
             colors[i] = settings.gradient.Evaluate(i / (textureResolution -1f));
         }
-        Debug.Log("gradient is " + settings.gradient.ToString());
+
         texture.SetPixels(colors);
         texture.Apply();
         settings.planetMaterial.SetTexture("_texture", texture);
