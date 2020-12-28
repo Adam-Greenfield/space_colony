@@ -122,7 +122,10 @@ public class Planet : MonoBehaviour, ICameraTarget
         for (int i = 0; i < 6; i++)
         {
             if(planetMeshFilters.water[i].gameObject.activeSelf)
+            {
                 waterFaces[i].ConstructMesh();
+                waterFaces[i].UpdateUVs();
+            }
         }
     }
 

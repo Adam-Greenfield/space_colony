@@ -22,7 +22,10 @@ public class WaterFace : PlanetFace
     public override void ConstructMesh()
     {
         base.ConstructMesh();
-        UpdateUVs();
+        //2D sampler
+        //Time goes in
+        //
+        //UpdateUVs();
     }
 
 }
