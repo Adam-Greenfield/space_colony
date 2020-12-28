@@ -73,25 +73,25 @@ public class Planet : MonoBehaviour, ICameraTarget
 
         for (int i = 0; i < 6; i++)
         {
-            GenerateMeshBase(planetMeshFilters.terrain, i, directions, colorSettings.planetMaterial);
+            GenerateMeshBase(planetMeshFilters.terrain, i, directions, colorSettings.planetMaterial, "terrain");
 
             terrainFaces[i] = new TerrainFace(shapeGenerator, planetMeshFilters.terrain[i].sharedMesh, resolution, directions[i]);
             bool renderTerrainFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
             planetMeshFilters.terrain[i].gameObject.SetActive(renderTerrainFace);
 
-            GenerateMeshBase(planetMeshFilters.water, i, directions, waterSettings.waterMaterial);
+            GenerateMeshBase(planetMeshFilters.water, i, directions, waterSettings.waterMaterial, "water");
 
-            waterFaces[i] = new WaterFace(waterGenerator, planetMeshFilters.water[i].sharedMesh, resolution, directions[i]);
+            waterFaces[i] = new WaterFace(waterGenerator, shapeGenerator, planetMeshFilters.water[i].sharedMesh, resolution, directions[i]);
             bool renderWaterFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
             planetMeshFilters.water[i].gameObject.SetActive(renderWaterFace);
         }
     }
 
-    private void GenerateMeshBase(MeshFilter[] filters, int i, Vector3[] directions, Material material)
+    private void GenerateMeshBase(MeshFilter[] filters, int i, Vector3[] directions, Material material, string name)
     {
         if(filters[i] == null)
         {
-            GameObject meshObj = new GameObject("mesh");
+            GameObject meshObj = new GameObject(name);
             meshObj.transform.parent = transform;
 
             meshObj.AddComponent<MeshRenderer>();

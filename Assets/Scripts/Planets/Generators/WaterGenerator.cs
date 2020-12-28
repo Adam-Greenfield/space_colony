@@ -12,17 +12,22 @@ public class WaterGenerator : IFaceGenerator
         this.settings = (WaterSettings)Isettings;
     }
 
-    public Vector3 CalculatePointOnPlanet(Vector3 pointOnUnitSphere)
+    public float CalculateElevation(Vector3 pointOnUnitSphere)
+    {
+        //might use this later for high tables of water
+        throw new System.NotImplementedException();
+    }
+
+    public float CalculateWaterElevation()
     {
         float elevation = settings.elevation;
 
         elevation = settings.planetRadius * ( 1 + elevation / 10f);
-        return pointOnUnitSphere * elevation;
+        return elevation;
     }
 
-    public float CalculateAccessableWater(Mesh waterMesh, Mesh terrainMesh)
+    public Vector3 CalculatePointOnPlanet(Vector3 pointOnUnitSphere, float elevation)
     {
-        Vector3[] verticies = mesh.vertices;
-
+        return pointOnUnitSphere * elevation;
     }
 }

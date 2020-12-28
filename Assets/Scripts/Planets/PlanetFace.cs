@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class PlanetFace
 {
-    IFaceGenerator generator;
+    protected IFaceGenerator generator;
     protected Mesh mesh;
     protected int resolution;
-    Vector3 localUp;
-    Vector3 axisA;
-    Vector3 axisB;
+    protected Vector3 localUp;
+    protected Vector3 axisA;
+    protected Vector3 axisB;
 
     public PlanetFace(IFaceGenerator generator, Mesh mesh, int resolution, Vector3 localUp)
     {
@@ -44,8 +44,11 @@ public class PlanetFace
                 //add to verticies
                 Vector3 pointOnUnitSphere = pointOnUnitCube.normalized;
                 //pass in delegate to do this
-                verticies[i] = generator.CalculatePointOnPlanet(pointOnUnitSphere);
+                float elevation = generator.CalculateElevation(pointOnUnitSphere);
+                verticies[i] = generator.CalculatePointOnPlanet(pointOnUnitSphere, elevation);
                 //create new verticies for the accessable water mesh
+
+                
 
                 //don't do this for bottom and right face, as the triangles would extend out the mesh
                 if (x != resolution -1 && y != resolution -1)

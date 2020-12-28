@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class WaterFace : PlanetFace
 {
-    public WaterFace(WaterGenerator waterGenerator, Mesh mesh, int resolution, Vector3 localUp)
-        : base(waterGenerator, mesh, resolution, localUp){}
+    ShapeGenerator shapeGenerator;
+    WaterGenerator waterGenerator;
+    public WaterFace(WaterGenerator waterGenerator, ShapeGenerator shapeGenerator, Mesh mesh, int resolution, Vector3 localUp)
+        : base(waterGenerator, mesh, resolution, localUp){
+            this.shapeGenerator = shapeGenerator;
+            this.waterGenerator = waterGenerator;
+        }
 
     public void UpdateUVs()
     {
@@ -22,9 +27,12 @@ public class WaterFace : PlanetFace
     public override void ConstructMesh()
     {
         Vector3[] verticies = new Vector3[resolution * resolution];
+        Vector3 emptyVector = new Vector3();
         //work out how many triangles will make up the face considering resolution
         int[] triangles = new int[(resolution - 1) * (resolution - 1) * 6];
         int triIndex = 0;
+        //calc elevation here as it's the same all around
+        float elevation = waterGenerator.CalculateWaterElevation();
 
         for (int y = 0; y < resolution; y++)
         {
@@ -39,27 +47,53 @@ public class WaterFace : PlanetFace
                 //add to verticies
                 Vector3 pointOnUnitSphere = pointOnUnitCube.normalized;
                 //pass in delegate to do this
-                verticies[i] = generator.CalculatePointOnPlanet(pointOnUnitSphere);
-
-                //don't do this for bottom and right face, as the triangles would extend out the mesh
-                if (x != resolution -1 && y != resolution -1)
+                
+                Vector3 pointOnPlanet = generator.CalculatePointOnPlanet(pointOnUnitSphere, elevation);
+                float terrainElevationComparitor = shapeGenerator.CalculateElevation(pointOnUnitSphere);
+                if(elevation > terrainElevationComparitor)
                 {
-                    //top left
-                    triangles[triIndex] = i;
-                    //bottom right
-                    triangles[triIndex + 1] = i + resolution + 1;
-                    //bottom left
-                    triangles[triIndex + 2] = i + resolution;
+                    verticies[i] = pointOnPlanet;
+                    //don't do this for bottom and right face, as the triangles would extend out the mesh
 
-                    //top left
-                    triangles[triIndex + 3] = i;
-                    //top right
-                    triangles[triIndex + 4] = i + 1;
-                    //bottom right
-                    triangles[triIndex + 5] = i + resolution + 1;
-
-                    triIndex += 6;
+                    //TODO only add verticies if it has a neighbour such that it can make a triangle
+                    //remove any verticies without neighbours
+                    //keep track of verticied by approved indexes
+                    
+                    
                 }
+
+            }
+        }
+
+        for (int i = 0; i < verticies.Length - (resolution + 1); i++)
+        {
+            if(
+                verticies[i] != emptyVector && 
+                verticies[i + resolution + 1] != emptyVector && 
+                verticies[i + resolution] != emptyVector )
+            {
+                //top left
+                triangles[triIndex] = i;
+                //bottom right
+                triangles[triIndex + 1] = i + resolution + 1;
+                //bottom left
+                triangles[triIndex + 2] = i + resolution;
+
+                triIndex += 3;
+            }
+
+            if(
+                verticies[i] != emptyVector && 
+                verticies[i + resolution + 1] != emptyVector && 
+                verticies[i + 1] != emptyVector )
+            {
+                triangles[triIndex] = i;
+                //top right
+                triangles[triIndex + 1] = i + 1;
+                //bottom right
+                triangles[triIndex + 2] = i + resolution + 1;
+
+                triIndex += 3;
             }
         }
 
