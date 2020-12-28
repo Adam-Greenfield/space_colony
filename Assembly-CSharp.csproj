@@ -43,6 +43,7 @@
      <Compile Include="Assets\Scripts\Noise.cs" />
      <Compile Include="Assets\Scripts\NoiseFilterFactory.cs" />
      <Compile Include="Assets\Scripts\Planets\Generators\ColorGenerator.cs" />
+     <Compile Include="Assets\Scripts\Planets\Generators\ForestGenerator.cs" />
      <Compile Include="Assets\Scripts\Planets\Generators\IFaceGenerator.cs" />
      <Compile Include="Assets\Scripts\Planets\Generators\ShapeGenerator.cs" />
      <Compile Include="Assets\Scripts\Planets\Generators\WaterGenerator.cs" />
@@ -50,7 +51,8 @@
      <Compile Include="Assets\Scripts\Planets\Planet.cs" />
      <Compile Include="Assets\Scripts\Planets\PlanetFace.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\ColorSettings.cs" />
-     <Compile Include="Assets\Scripts\Planets\Settings\IFaceSetting.cs" />
+     <Compile Include="Assets\Scripts\Planets\Settings\ForestSettings.cs" />
+     <Compile Include="Assets\Scripts\Planets\Settings\IFaceSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\NoiseSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\ShapeSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\WaterSettings.cs" />

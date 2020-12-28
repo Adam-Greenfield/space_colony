@@ -125,6 +125,7 @@ public class Planet : MonoBehaviour, ICameraTarget
             {
                 waterFaces[i].ConstructMesh();
                 waterFaces[i].UpdateUVs();
+                //TODO also create water available mesh by comparing with terrain elevation
             }
         }
     }
@@ -175,4 +176,12 @@ public class Planet : MonoBehaviour, ICameraTarget
     {
         
     }
+
+    //TODO
+    //Planet has resources: food, wood, water, ore. ore for technology wood for construction
+    //Forest's exist in the plains, ore exists in the mountains
+
+    //calculate a mesh for available water and a mesh for buildable land
+    //for land, work out area with at least a few verticies without a harsh gradient
+    //for water, create a mesh where the water elevation is higher than the ground elevation
 }

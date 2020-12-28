@@ -8,7 +8,7 @@ public class ShapeGenerator : IFaceGenerator
     INoiseFilter[] noiseFilters;
     public MinMax elevationMinMax;
 
-    public void UpdateSettings(IFaceSetting Isettings)
+    public void UpdateSettings(IFaceSettings Isettings)
     {
         this.settings = (ShapeSettings)Isettings;
         noiseFilters = new INoiseFilter[settings.noiseLayers.Length];

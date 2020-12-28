@@ -7,7 +7,7 @@ public class WaterGenerator : IFaceGenerator
 
     WaterSettings settings;
 
-    public void UpdateSettings(IFaceSetting Isettings)
+    public void UpdateSettings(IFaceSettings Isettings)
     {
         this.settings = (WaterSettings)Isettings;
     }
@@ -18,5 +18,11 @@ public class WaterGenerator : IFaceGenerator
 
         elevation = settings.planetRadius * ( 1 + elevation / 10f);
         return pointOnUnitSphere * elevation;
+    }
+
+    public float CalculateAccessableWater(Mesh waterMesh, Mesh terrainMesh)
+    {
+        Vector3[] verticies = mesh.vertices;
+
     }
 }

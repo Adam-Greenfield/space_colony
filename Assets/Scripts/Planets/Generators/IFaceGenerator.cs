@@ -4,7 +4,6 @@ using UnityEngine;
 
 public interface IFaceGenerator
 {
-    void UpdateSettings(IFaceSetting settings);
-
+    void UpdateSettings(IFaceSettings settings);
     Vector3 CalculatePointOnPlanet(Vector3 pointOnUnitSphere);
 }
