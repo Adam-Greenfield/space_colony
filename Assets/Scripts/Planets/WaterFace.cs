@@ -67,7 +67,39 @@ public class WaterFace : PlanetFace
                 //TODO have the possibility to create triangles from the other direction, 
                 int i = x + y * resolution;
 
-                if (x == resolution -1 || y == resolution -1)
+                if(x == resolution -1 || y == resolution -1)
+                    continue;
+
+                if(
+                    verticies[i] != emptyVector && 
+                    verticies[i + resolution + 1] != emptyVector && 
+                    verticies[i + resolution] != emptyVector )
+                {
+                    //top left
+                    triangles[triIndex] = i;
+                    //bottom right
+                    triangles[triIndex + 1] = i + resolution + 1;
+                    //bottom left
+                    triangles[triIndex + 2] = i + resolution;
+
+                    triIndex += 3;
+                }
+
+                if(
+                    verticies[i] != emptyVector && 
+                    verticies[i + resolution + 1] != emptyVector && 
+                    verticies[i + 1] != emptyVector )
+                {
+                    triangles[triIndex] = i;
+                    //top right
+                    triangles[triIndex + 1] = i + 1;
+                    //bottom right
+                    triangles[triIndex + 2] = i + resolution + 1;
+
+                    triIndex += 3;
+                }
+
+                if(x == 0 || y == 0)
                     continue;
 
                 //if there is no i + resolution + 1, but there is an i + 1 and an i + resolution, draw a triangle
@@ -97,35 +129,6 @@ public class WaterFace : PlanetFace
                     triangles[triIndex + 1] = i + resolution;
                     //bottom left
                     triangles[triIndex + 2] = i + resolution - 1;
-
-                    triIndex += 3;
-                }
-
-                if(
-                    verticies[i] != emptyVector && 
-                    verticies[i + resolution + 1] != emptyVector && 
-                    verticies[i + resolution] != emptyVector )
-                {
-                    //top left
-                    triangles[triIndex] = i;
-                    //bottom right
-                    triangles[triIndex + 1] = i + resolution + 1;
-                    //bottom left
-                    triangles[triIndex + 2] = i + resolution;
-
-                    triIndex += 3;
-                }
-
-                if(
-                    verticies[i] != emptyVector && 
-                    verticies[i + resolution + 1] != emptyVector && 
-                    verticies[i + 1] != emptyVector )
-                {
-                    triangles[triIndex] = i;
-                    //top right
-                    triangles[triIndex + 1] = i + 1;
-                    //bottom right
-                    triangles[triIndex + 2] = i + resolution + 1;
 
                     triIndex += 3;
                 }

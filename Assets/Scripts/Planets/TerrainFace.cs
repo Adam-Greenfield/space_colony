@@ -7,6 +7,8 @@ public class TerrainFace : PlanetFace
         : base(shapeGenerator, mesh, resolution, localUp){}
 
     //TODO create a mesh of useable land, where forests and structures can go
-    //
+    //as we generate terrain, create this useable mesh
+
+    
 
 }
