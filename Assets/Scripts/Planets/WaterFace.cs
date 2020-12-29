@@ -65,35 +65,44 @@ public class WaterFace : PlanetFace
             }
         }
 
-        for (int i = 0; i < verticies.Length - (resolution + 1); i++)
+        for (int y = 0; y < resolution; y++)
         {
-            if(
-                verticies[i] != emptyVector && 
-                verticies[i + resolution + 1] != emptyVector && 
-                verticies[i + resolution] != emptyVector )
+            for (int x = 0; x < resolution; x++)
             {
-                //top left
-                triangles[triIndex] = i;
-                //bottom right
-                triangles[triIndex + 1] = i + resolution + 1;
-                //bottom left
-                triangles[triIndex + 2] = i + resolution;
+                //same as incrememnting i in second loop
+                int i = x + y * resolution;
 
-                triIndex += 3;
-            }
+                if (x == resolution -1 || y == resolution -1)
+                    continue;
 
-            if(
-                verticies[i] != emptyVector && 
-                verticies[i + resolution + 1] != emptyVector && 
-                verticies[i + 1] != emptyVector )
-            {
-                triangles[triIndex] = i;
-                //top right
-                triangles[triIndex + 1] = i + 1;
-                //bottom right
-                triangles[triIndex + 2] = i + resolution + 1;
+                if(
+                    verticies[i] != emptyVector && 
+                    verticies[i + resolution + 1] != emptyVector && 
+                    verticies[i + resolution] != emptyVector )
+                {
+                    //top left
+                    triangles[triIndex] = i;
+                    //bottom right
+                    triangles[triIndex + 1] = i + resolution + 1;
+                    //bottom left
+                    triangles[triIndex + 2] = i + resolution;
 
-                triIndex += 3;
+                    triIndex += 3;
+                }
+
+                if(
+                    verticies[i] != emptyVector && 
+                    verticies[i + resolution + 1] != emptyVector && 
+                    verticies[i + 1] != emptyVector )
+                {
+                    triangles[triIndex] = i;
+                    //top right
+                    triangles[triIndex + 1] = i + 1;
+                    //bottom right
+                    triangles[triIndex + 2] = i + resolution + 1;
+
+                    triIndex += 3;
+                }
             }
         }
 
