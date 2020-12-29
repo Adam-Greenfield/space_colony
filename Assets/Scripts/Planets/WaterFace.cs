@@ -53,13 +53,6 @@ public class WaterFace : PlanetFace
                 if(elevation > terrainElevationComparitor)
                 {
                     verticies[i] = pointOnPlanet;
-                    //don't do this for bottom and right face, as the triangles would extend out the mesh
-
-                    //TODO only add verticies if it has a neighbour such that it can make a triangle
-                    //remove any verticies without neighbours
-                    //keep track of verticied by approved indexes
-                    
-                    
                 }
 
             }
@@ -70,10 +63,43 @@ public class WaterFace : PlanetFace
             for (int x = 0; x < resolution; x++)
             {
                 //same as incrememnting i in second loop
+
+                //TODO have the possibility to create triangles from the other direction, 
                 int i = x + y * resolution;
 
                 if (x == resolution -1 || y == resolution -1)
                     continue;
+
+                //if there is no i + resolution + 1, but there is an i + 1 and an i + resolution, draw a triangle
+                if(verticies[i] != emptyVector &&
+                    verticies[i + resolution] == emptyVector &&
+                    verticies[i + resolution -1] != emptyVector
+                    )
+                {
+                    triangles[triIndex] = i;
+                    //bottom right
+                    triangles[triIndex + 1] = i + resolution - 1;
+                    //bottom left
+                    triangles[triIndex + 2] = i - 1;
+
+                    triIndex += 3;
+                }
+
+                //if there is no i - 1, but there is  i - 1 + resolution, draw a triangle
+                if(i > 0 &&
+                    verticies[i] != emptyVector &&
+                    verticies[i - 1] == emptyVector &&
+                    verticies[i + resolution -1] != emptyVector
+                    )
+                {
+                    triangles[triIndex] = i;
+                    //bottom right
+                    triangles[triIndex + 1] = i + resolution;
+                    //bottom left
+                    triangles[triIndex + 2] = i + resolution - 1;
+
+                    triIndex += 3;
+                }
 
                 if(
                     verticies[i] != emptyVector && 
