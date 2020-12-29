@@ -14,6 +14,7 @@ public class Planet : MonoBehaviour, ICameraTarget
     public ShapeSettings shapeSettings;
     public ColorSettings colorSettings;
     public WaterSettings waterSettings;
+    public TreeSettings treeSettings;
 
     [HideInInspector]
     public bool shapeSettingsFoldout;
@@ -29,6 +30,7 @@ public class Planet : MonoBehaviour, ICameraTarget
     ColorGenerator colorGenerator = new ColorGenerator();
     ShapeGenerator shapeGenerator = new ShapeGenerator();
     WaterGenerator waterGenerator = new WaterGenerator();
+    TreeGenerator treeGenerator = new TreeGenerator();
 
     [SerializeField, HideInInspector]
 
@@ -55,6 +57,7 @@ public class Planet : MonoBehaviour, ICameraTarget
         colorGenerator.UpdateSettings(colorSettings);
         shapeGenerator.UpdateSettings(shapeSettings);
         waterGenerator.UpdateSettings(waterSettings);
+        treeGenerator.UpdateSettings(treeSettings);
 
         if (planetMeshFilters.terrain == null || planetMeshFilters.terrain.Length == 0)
         {
@@ -110,6 +113,7 @@ public class Planet : MonoBehaviour, ICameraTarget
                 terrainFaces[i].ConstructMesh();
         }
         colorGenerator.UpdateElevation(shapeGenerator.elevationMinMax);
+        treeGenerator.UpdateTreeLine(null, shapeGenerator.elevationMinMax.Max);
     }
 
     void GenerateColor()
@@ -128,6 +132,8 @@ public class Planet : MonoBehaviour, ICameraTarget
                 //TODO also create water available mesh by comparing with terrain elevation
             }
         }
+        float waterElevation = waterGenerator.CalculateWaterElevation();
+        treeGenerator.UpdateTreeLine(waterElevation, null);
     }
 
     public void GeneratePlanet()

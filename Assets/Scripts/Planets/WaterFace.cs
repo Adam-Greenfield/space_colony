@@ -2,15 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaterFace : PlanetFace
+public class WaterFace
 {
     ShapeGenerator shapeGenerator;
     WaterGenerator waterGenerator;
+    Mesh mesh;
+    int resolution;
+    Vector3 localUp;
+    Vector3 axisA;
+    Vector3 axisB;
     public WaterFace(WaterGenerator waterGenerator, ShapeGenerator shapeGenerator, Mesh mesh, int resolution, Vector3 localUp)
-        : base(waterGenerator, mesh, resolution, localUp){
-            this.shapeGenerator = shapeGenerator;
-            this.waterGenerator = waterGenerator;
-        }
+    {
+        this.shapeGenerator = shapeGenerator;
+        this.waterGenerator = waterGenerator;
+
+        this.mesh = mesh;
+        this.resolution = resolution;
+        this.localUp = localUp;
+
+        //get a perpendicular axis from local
+        axisA = new Vector3(localUp.y, localUp.z, localUp.x);
+        //get cross product of local and a, results in normal to local and a
+        axisB = Vector3.Cross(localUp, axisA);
+    }
+
+        
 
     public void UpdateUVs()
     {
@@ -24,7 +40,7 @@ public class WaterFace : PlanetFace
         mesh.uv = uvs;
     }
 
-    public override void ConstructMesh()
+    public void ConstructMesh()
     {
         Vector3[] verticies = new Vector3[resolution * resolution];
         Vector3 emptyVector = new Vector3();
@@ -48,13 +64,11 @@ public class WaterFace : PlanetFace
                 Vector3 pointOnUnitSphere = pointOnUnitCube.normalized;
                 //pass in delegate to do this
                 
-                Vector3 pointOnPlanet = generator.CalculatePointOnPlanet(pointOnUnitSphere, elevation);
+                Vector3 pointOnPlanet = waterGenerator.CalculatePointOnPlanet(pointOnUnitSphere, elevation);
                 float terrainElevationComparitor = shapeGenerator.CalculateElevation(pointOnUnitSphere);
                 if(elevation > terrainElevationComparitor)
-                {
                     verticies[i] = pointOnPlanet;
-                }
-
+                
             }
         }
 
