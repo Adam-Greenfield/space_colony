@@ -17,14 +17,12 @@ public class TreeGenerator
     }
 
     //trees appear randomly about the planet for decoration
-    public void InstantiateTrees(Mesh terrainMesh)
+    public void InstantiateTrees(Vector3 vertex, float elevation, GameObject treeHolder, ShapeGenerator shapeGenerator, int i)
     {
-        Vector3[] verticies = terrainMesh.vertices;
-
-        for (int i = 0; i < verticies.Length; i++)
+        if( elevation < treeLineMax && i % (11000 - settings.intensity * 1000) == 0)
         {
-            if(i % 100 == 0)
-                GameObject.Instantiate(settings.treeModel, verticies[i], Quaternion.identity);
+            GameObject tree = GameObject.Instantiate(settings.treeModel, vertex, Quaternion.identity);
+            tree.transform.parent = treeHolder.transform;
         }
         //randomly spread about individual tree assets
         //collect positions and rotations to instantiate trees in

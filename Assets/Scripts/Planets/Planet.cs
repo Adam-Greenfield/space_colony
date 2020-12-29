@@ -28,6 +28,8 @@ public class Planet : MonoBehaviour, ICameraTarget
     [HideInInspector]
     public bool treeSettingsFoldout;
 
+    public GameObject treeHolder;
+
     private int _distanceFromCore;
 
     ColorGenerator colorGenerator = new ColorGenerator();
@@ -81,7 +83,7 @@ public class Planet : MonoBehaviour, ICameraTarget
         {
             GenerateMeshBase(planetMeshFilters.terrain, i, directions, colorSettings.planetMaterial, "terrain");
 
-            terrainFaces[i] = new TerrainFace(shapeGenerator, planetMeshFilters.terrain[i].sharedMesh, resolution, directions[i]);
+            terrainFaces[i] = new TerrainFace(waterGenerator, shapeGenerator, treeGenerator, planetMeshFilters.terrain[i].sharedMesh, resolution, directions[i], transform);
             bool renderTerrainFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
             planetMeshFilters.terrain[i].gameObject.SetActive(renderTerrainFace);
 
@@ -139,14 +141,6 @@ public class Planet : MonoBehaviour, ICameraTarget
         treeGenerator.UpdateTreeLine(waterElevation, null);
     }
 
-    void GenerateTrees()
-    {
-        for (int i = 0; i < 6; i++)
-        {
-            if(planetMeshFilters.terrain[i].gameObject.activeSelf)
-                treeGenerator.InstantiateTrees(planetMeshFilters.terrain[i].sharedMesh);
-        }
-    }
 
     public void GeneratePlanet()
     {
@@ -154,7 +148,6 @@ public class Planet : MonoBehaviour, ICameraTarget
         GenerateTerrain();
         GenerateColor();
         GenerateWater();
-        GenerateTrees();
     }
 
     public void OnShapeSettingsUpdated()
@@ -180,6 +173,7 @@ public class Planet : MonoBehaviour, ICameraTarget
         if (autoUpdate)
         {
             Initialize();
+            GenerateTerrain();
             GenerateWater();
         }
     }
@@ -189,7 +183,7 @@ public class Planet : MonoBehaviour, ICameraTarget
         if (autoUpdate)
         {
             Initialize();
-            GenerateTrees();
+            GenerateTerrain();
         }
     }
 

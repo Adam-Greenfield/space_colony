@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class WaterFace
 {
-    ShapeGenerator shapeGenerator;
     WaterGenerator waterGenerator;
+    ShapeGenerator shapeGenerator;
     Mesh mesh;
     int resolution;
     Vector3 localUp;
@@ -49,6 +49,7 @@ public class WaterFace
         int triIndex = 0;
         //calc elevation here as it's the same all around
         float elevation = waterGenerator.CalculateWaterElevation();
+        Debug.Log(elevation);
 
         for (int y = 0; y < resolution; y++)
         {

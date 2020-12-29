@@ -3,20 +3,26 @@ using System.Collections;
 
 public class TerrainFace
 {
-
-    ShapeGenerator generator;
-    Mesh mesh;
+    GameObject treeHolder;
+    WaterGenerator waterGenerator;
+    ShapeGenerator shapeGenerator;
+    TreeGenerator treeGenerator;
+    public Mesh mesh { get; private set; }
     int resolution;
     Vector3 localUp;
     Vector3 axisA;
     Vector3 axisB;
+    Transform parentTransform;
 
-    public TerrainFace(ShapeGenerator shapeGenerator, Mesh mesh, int resolution, Vector3 localUp)
+    public TerrainFace(WaterGenerator waterGenerator, ShapeGenerator shapeGenerator, TreeGenerator treeGenerator, Mesh mesh, int resolution, Vector3 localUp, Transform parentTransform)
     {
-        this.generator = shapeGenerator;
+        this.waterGenerator = waterGenerator;
+        this.shapeGenerator = shapeGenerator;
+        this.treeGenerator = treeGenerator;
         this.mesh = mesh;
         this.resolution = resolution;
         this.localUp = localUp;
+        this.parentTransform = parentTransform;
 
         //get a perpendicular axis from local
         axisA = new Vector3(localUp.y, localUp.z, localUp.x);
@@ -29,8 +35,16 @@ public class TerrainFace
 
     public void ConstructMesh()
     {
+        float waterElevation = waterGenerator.CalculateWaterElevation();
         Vector3[] verticies = new Vector3[resolution * resolution];
         //work out how many triangles will make up the face considering resolution
+        if (treeHolder != null)
+        {
+            GameObject.DestroyImmediate(treeHolder);
+        }
+
+        treeHolder = new GameObject("Trees");
+        treeHolder.transform.parent = parentTransform;
         int[] triangles = new int[(resolution - 1) * (resolution - 1) * 6];
         int triIndex = 0;
 
@@ -47,9 +61,16 @@ public class TerrainFace
                 //add to verticies
                 Vector3 pointOnUnitSphere = pointOnUnitCube.normalized;
                 //pass in delegate to do this
-                float elevation = generator.CalculateElevation(pointOnUnitSphere);
-                verticies[i] = generator.CalculatePointOnPlanet(pointOnUnitSphere, elevation);
-                
+                float elevation = shapeGenerator.CalculateElevation(pointOnUnitSphere);
+                Vector3 vertexPoint = shapeGenerator.CalculatePointOnPlanet(pointOnUnitSphere, elevation);
+                verticies[i] = vertexPoint;
+
+                //add trees here
+                if(elevation > waterElevation && i % 10 == 0)
+                {
+                    treeGenerator.InstantiateTrees(vertexPoint, elevation, treeHolder, shapeGenerator, i);
+                }
+                                    
 
                 //don't do this for bottom and right face, as the triangles would extend out the mesh
                 if (x != resolution -1 && y != resolution -1)
