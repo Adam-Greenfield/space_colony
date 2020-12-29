@@ -105,7 +105,8 @@ public class WaterFace : PlanetFace
                 //if there is no i + resolution + 1, but there is an i + 1 and an i + resolution, draw a triangle
                 if(verticies[i] != emptyVector &&
                     verticies[i + resolution] == emptyVector &&
-                    verticies[i + resolution -1] != emptyVector
+                    verticies[i + resolution -1] != emptyVector &&
+                    verticies[i - 1] != emptyVector
                     )
                 {
                     triangles[triIndex] = i;
@@ -121,7 +122,8 @@ public class WaterFace : PlanetFace
                 if(i > 0 &&
                     verticies[i] != emptyVector &&
                     verticies[i - 1] == emptyVector &&
-                    verticies[i + resolution -1] != emptyVector
+                    verticies[i + resolution -1] != emptyVector &&
+                    verticies[i + resolution] != emptyVector
                     )
                 {
                     triangles[triIndex] = i;
