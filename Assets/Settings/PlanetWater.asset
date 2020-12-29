@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16d1447a57fa9b724add7914a9d3dc19, type: 3}
   m_Name: PlanetWater
   m_EditorClassIdentifier: 
-  elevation: 0.01
-  color: {r: 0, g: 0, b: 0, a: 0}
+  planetRadius: 5
+  elevation: 0.1
   waterMaterial: {fileID: 2100000, guid: 43e3261a7b90a0bccab26f57e34cf71e, type: 2}

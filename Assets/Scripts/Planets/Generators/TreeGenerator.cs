@@ -13,8 +13,6 @@ public class TreeGenerator
     public void UpdateSettings(TreeSettings settings)
     {
         this.settings = settings;
-
-
         //get the tree line
     }
 

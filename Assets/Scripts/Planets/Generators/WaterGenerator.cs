@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaterGenerator : IFaceGenerator
+public class WaterGenerator
 {
 
     WaterSettings settings;
 
-    public void UpdateSettings(IFaceSettings Isettings)
+    public void UpdateSettings(WaterSettings settings)
     {
-        this.settings = (WaterSettings)Isettings;
+        this.settings = settings;
     }
 
     public float CalculateElevation(Vector3 pointOnUnitSphere)

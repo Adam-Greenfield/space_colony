@@ -25,6 +25,9 @@ public class Planet : MonoBehaviour, ICameraTarget
     [HideInInspector]
     public bool waterSettingsFoldout;
 
+    [HideInInspector]
+    public bool treeSettingsFoldout;
+
     private int _distanceFromCore;
 
     ColorGenerator colorGenerator = new ColorGenerator();
@@ -142,6 +145,7 @@ public class Planet : MonoBehaviour, ICameraTarget
         GenerateTerrain();
         GenerateColor();
         GenerateWater();
+        SetToScale();
     }
 
     public void OnShapeSettingsUpdated()
@@ -171,16 +175,18 @@ public class Planet : MonoBehaviour, ICameraTarget
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void OnTreeSettingsUpdated()
     {
-        
+        if (autoUpdate)
+        {
+            // Initialize();
+            // GenerateTrees();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetToScale()
     {
-        
+
     }
 
     //TODO

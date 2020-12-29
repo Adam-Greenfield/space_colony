@@ -10,6 +10,7 @@ public class PlanetEditor : Editor
     Editor shapeEditor;
     Editor colorEditor;
     Editor waterEditor;
+    Editor treeEditor;
     Planet planet;
 
     public override void OnInspectorGUI()
@@ -29,6 +30,7 @@ public class PlanetEditor : Editor
         DrawSettingsEditor(planet.shapeSettings, planet.OnShapeSettingsUpdated, ref planet.shapeSettingsFoldout, ref shapeEditor);
         DrawSettingsEditor(planet.colorSettings, planet.OnColorSettingsUpdated, ref planet.colorSettingsFoldout, ref colorEditor);
         DrawSettingsEditor(planet.waterSettings, planet.OnWaterSettingsUpdated, ref planet.waterSettingsFoldout, ref waterEditor);
+        DrawSettingsEditor(planet.treeSettings, planet.OnTreeSettingsUpdated, ref planet.treeSettingsFoldout, ref treeEditor);
         
     }
          

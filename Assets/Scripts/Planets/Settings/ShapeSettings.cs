@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu()]
-public class ShapeSettings : ScriptableObject, IFaceSettings
+public class ShapeSettings : ScriptableObject
 {
-    public float planetRadius { get; set; } = 1;
+    public float planetRadius = 1;
     public NoiseLayer[] noiseLayers; 
 
     [System.Serializable]
