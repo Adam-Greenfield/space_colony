@@ -139,13 +139,22 @@ public class Planet : MonoBehaviour, ICameraTarget
         treeGenerator.UpdateTreeLine(waterElevation, null);
     }
 
+    void GenerateTrees()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if(planetMeshFilters.terrain[i].gameObject.activeSelf)
+                treeGenerator.InstantiateTrees(planetMeshFilters.terrain[i].sharedMesh);
+        }
+    }
+
     public void GeneratePlanet()
     {
         Initialize();
         GenerateTerrain();
         GenerateColor();
         GenerateWater();
-        SetToScale();
+        GenerateTrees();
     }
 
     public void OnShapeSettingsUpdated()
@@ -179,15 +188,11 @@ public class Planet : MonoBehaviour, ICameraTarget
     {
         if (autoUpdate)
         {
-            // Initialize();
-            // GenerateTrees();
+            Initialize();
+            GenerateTrees();
         }
     }
 
-    public void SetToScale()
-    {
-
-    }
 
     //TODO
     //Planet has resources: food, wood, water, ore. ore for technology wood for construction

@@ -17,13 +17,21 @@ public class TreeGenerator
     }
 
     //trees appear randomly about the planet for decoration
-    public void GenerateTrees()
+    public void InstantiateTrees(Mesh terrainMesh)
     {
+        Vector3[] verticies = terrainMesh.vertices;
+
+        for (int i = 0; i < verticies.Length; i++)
+        {
+            if(i % 100 == 0)
+                GameObject.Instantiate(settings.treeModel, verticies[i], Quaternion.identity);
+        }
         //randomly spread about individual tree assets
+        //collect positions and rotations to instantiate trees in
     }
 
     //a forest is a blob of trees that can be farmed for wood
-    public void GenerateForests()
+    public void InstantiateForests()
     {
         //create a series of forests out of the individual trees
     }
