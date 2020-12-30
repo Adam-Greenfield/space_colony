@@ -45,10 +45,14 @@ public class TerrainFace
         float waterElevation = waterGenerator.CalculateWaterElevation();
         Vector3[] verticies = new Vector3[resolution * resolution];
         int numOfTrees = treeGenerator.GetInverseNumberOfTrees(resolution * resolution);
+
+        int clusterSizeLength = treeGenerator.GetClusterSequenceLength();
+        int[] clusterSequenceMapped = treeGenerator.MapClusterBySize();
         //work out how many triangles will make up the face considering resolution
 
         int[] triangles = new int[(resolution - 1) * (resolution - 1) * 6];
         int triIndex = 0;
+        int clusterIndex = 0;
 
         for (int y = 0; y < resolution; y++)
         {
@@ -69,9 +73,40 @@ public class TerrainFace
 
                 int randomIndex = this.random.Next(i - (resolution * 200), i + (resolution * 200));
 
-                //add trees here
-                if (randomIndex % numOfTrees == 0)
-                    treeGenerator.InstantiateTrees(vertexPoint, elevation, treeHolder, shapeGenerator, waterElevation, worldOrigin);
+                //work out the logic for tree cluster generation here, so we don't have to send the whole verticies array 
+                //  into the tree generator for every single tree 
+                if (numOfTrees != 0 && randomIndex % numOfTrees == 0)
+                {
+                    //add clusters depending on the settings
+
+                    //get cluster occurrence from the settings
+
+                    //1 cluster density is one tree each time, using fibonacci 1, 2, 3, 5, 8, 13, 21, 34, 55
+
+                    //each preceeding number should be three times as common as the next
+
+                    //so if cluster size is 3, it should go 1 1 1 2 2 3 1 1 1 2 2 3
+                    //index: 0 0 0 1 1 2
+                    //size: 3
+                    //length: 6
+                    //index start: 0 1 2 3 4 5
+                    int vertexSpiral = i;
+                    for (int a = 0; a < clusterSequenceMapped[clusterIndex]; a++)
+                    {
+                        
+                        //Debug.Log(clusterSequenceMapped[clusterIndex]);
+                        //get random verticies around the tree
+                        int randomTreePlacement = this.random.Next(i - (50), i + (50));
+                        treeGenerator.InstantiateTrees(verticies[Mathf.Clamp(randomTreePlacement, 0, (resolution * resolution) - 1)],
+                            elevation, treeHolder, shapeGenerator, waterElevation, worldOrigin);
+                    }
+
+                    clusterIndex ++;
+
+                    if ( clusterIndex == clusterSequenceMapped.Length )
+                        clusterIndex = 0;
+
+                }
                                     
 
                 //don't do this for bottom and right face, as the triangles would extend out the mesh
@@ -101,4 +136,6 @@ public class TerrainFace
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
     }
+
+
 }

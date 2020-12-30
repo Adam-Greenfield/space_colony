@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PlanetMaterial
+  m_Name: Planet1Material
   m_Shader: {fileID: -6465566751694194690, guid: ac7feb1f346d61df69e25ea734d089c2,
     type: 3}
   m_ShaderKeywords: 

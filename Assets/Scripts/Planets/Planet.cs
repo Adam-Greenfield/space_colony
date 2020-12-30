@@ -58,6 +58,8 @@ public class Planet : MonoBehaviour, ICameraTarget
         GeneratePlanet();
     }
 
+    protected virtual void Awake() {}
+
     public int distanceFromCore { get { return _distanceFromCore; } set { _distanceFromCore = value; } }
 
     void Initialize()
@@ -81,6 +83,7 @@ public class Planet : MonoBehaviour, ICameraTarget
             DestroyImmediate(transform.Find("Trees").gameObject);
 
         treeHolder = new GameObject("Trees");
+        treeHolder.transform.position = transform.position;
         treeHolder.transform.parent = transform;
         
         terrainFaces = new TerrainFace[6];
@@ -113,6 +116,7 @@ public class Planet : MonoBehaviour, ICameraTarget
         {
             GameObject meshObj = new GameObject(name);
             meshObj.transform.parent = transform;
+            meshObj.transform.position = transform.position;
 
             meshObj.AddComponent<MeshRenderer>();
             filters[i] = meshObj.AddComponent<MeshFilter>();
@@ -146,7 +150,6 @@ public class Planet : MonoBehaviour, ICameraTarget
             {
                 waterFaces[i].ConstructMesh();
                 waterFaces[i].UpdateUVs();
-                //TODO also create water available mesh by comparing with terrain elevation
             }
         }
         float waterElevation = waterGenerator.CalculateWaterElevation();
@@ -201,9 +204,14 @@ public class Planet : MonoBehaviour, ICameraTarget
 
     //TODO
     //Planet has resources: food, wood, water, ore. ore for technology wood for construction
-    //Forest's exist in the plains, ore exists in the mountains
 
-    //calculate a mesh for available water and a mesh for buildable land
-    //for land, work out area with at least a few verticies without a harsh gradient
-    //for water, create a mesh where the water elevation is higher than the ground elevation
+
+    //create stats for planet: health, resource amounts
+    //split the water mesh into water visual and available water
+    //expand on the water and terrain shaders
+    //implement building and feature placement by mouse
+    //build the sun
+    //implement orbits
+    //create clusters of trees, let trees grow over time, and appear around the planet
+    //create life (people walking about and chopping down trees, going in and out of buildings)
 }

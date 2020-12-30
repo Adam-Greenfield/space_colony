@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    float distance = 4.0f;
+    float distance = 15.0f;
     float speed = 0.2f;
     float rotateSpeed = 8.0f;
     float inputTimer = 5f;
