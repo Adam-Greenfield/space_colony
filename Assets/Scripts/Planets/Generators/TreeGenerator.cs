@@ -13,13 +13,13 @@ public class TreeGenerator
     public void UpdateSettings(TreeSettings settings)
     {
         this.settings = settings;
-        //get the tree line
     }
 
     //trees appear randomly about the planet for decoration
-    public void InstantiateTrees(Vector3 vertex, float elevation, GameObject treeHolder, ShapeGenerator shapeGenerator, int i)
+    public void InstantiateTrees(Vector3 vertex, float elevation, GameObject treeHolder, ShapeGenerator shapeGenerator, float waterElevation)
     {
-        if( elevation < treeLineMax && i % (11000 - settings.intensity * 1000) == 0)
+        //TODO check elevation > waterElevation
+        if( elevation < treeLineMax && elevation > waterElevation)
         {
             GameObject tree = GameObject.Instantiate(settings.treeModel, vertex, Quaternion.identity);
             tree.transform.parent = treeHolder.transform;
@@ -32,6 +32,11 @@ public class TreeGenerator
     public void InstantiateForests()
     {
         //create a series of forests out of the individual trees
+    }
+
+    public int GetNumberOfTrees(int verticies)
+    {
+        return verticies / ((11 - settings.intensity) * 50);
     }
 
     public void UpdateTreeLine(float? minLandElevation, float? maxLandELevation)

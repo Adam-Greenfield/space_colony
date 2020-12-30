@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c038b70d5c8eb085a086b31cef6ad15, type: 3}
   m_Name: PlanetTrees
   m_EditorClassIdentifier: 
-  intensity: 10
-  treeLineElevationPercent: 0.5
+  intensity: 4
+  treeLineElevationPercent: 1
   treeModel: {fileID: 4528161140223803936, guid: 3df02fa0c126f91c6ac67c15bdca32f1,
     type: 3}
