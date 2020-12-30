@@ -28,6 +28,7 @@ public class Planet : MonoBehaviour, ICameraTarget
     [HideInInspector]
     public bool treeSettingsFoldout;
 
+    [HideInInspector]
     public GameObject treeHolder;
 
     private int _distanceFromCore;
