@@ -3,7 +3,6 @@ using System.Collections;
 
 public class TerrainFace
 {
-    GameObject treeHolder;
     WaterGenerator waterGenerator;
     ShapeGenerator shapeGenerator;
     TreeGenerator treeGenerator;
@@ -13,8 +12,12 @@ public class TerrainFace
     Vector3 axisA;
     Vector3 axisB;
     Transform parentTransform;
+    Transform treeHolder;
+    System.Random random;
 
-    public TerrainFace(WaterGenerator waterGenerator, ShapeGenerator shapeGenerator, TreeGenerator treeGenerator, Mesh mesh, int resolution, Vector3 localUp, Transform parentTransform)
+
+    public TerrainFace(WaterGenerator waterGenerator, ShapeGenerator shapeGenerator, TreeGenerator treeGenerator,
+        Mesh mesh, int resolution, Vector3 localUp, Transform parentTransform, Transform treeHolder)
     {
         this.waterGenerator = waterGenerator;
         this.shapeGenerator = shapeGenerator;
@@ -23,6 +26,8 @@ public class TerrainFace
         this.resolution = resolution;
         this.localUp = localUp;
         this.parentTransform = parentTransform;
+        this.treeHolder = treeHolder;
+        this.random = new System.Random();
 
         //get a perpendicular axis from local
         axisA = new Vector3(localUp.y, localUp.z, localUp.x);
@@ -37,16 +42,9 @@ public class TerrainFace
     {
         float waterElevation = waterGenerator.CalculateWaterElevation();
         Vector3[] verticies = new Vector3[resolution * resolution];
-        int numOfTrees = treeGenerator.GetNumberOfTrees(resolution * resolution);
-        Debug.Log(numOfTrees);
+        int numOfTrees = treeGenerator.GetInverseNumberOfTrees(resolution * resolution);
         //work out how many triangles will make up the face considering resolution
-        if (treeHolder != null)
-        {
-            GameObject.DestroyImmediate(treeHolder);
-        }
 
-        treeHolder = new GameObject("Trees");
-        treeHolder.transform.parent = parentTransform;
         int[] triangles = new int[(resolution - 1) * (resolution - 1) * 6];
         int triIndex = 0;
 
@@ -67,13 +65,11 @@ public class TerrainFace
                 Vector3 vertexPoint = shapeGenerator.CalculatePointOnPlanet(pointOnUnitSphere, elevation);
                 verticies[i] = vertexPoint;
 
-                int randomIndex = new System.Random().Next(i - (resolution * 20), i + (resolution * 20));
+                int randomIndex = this.random.Next(i - (resolution * 200), i + (resolution * 200));
 
                 //add trees here
                 if (randomIndex % numOfTrees == 0)
-                {
                     treeGenerator.InstantiateTrees(vertexPoint, elevation, treeHolder, shapeGenerator, waterElevation);
-                }
                                     
 
                 //don't do this for bottom and right face, as the triangles would extend out the mesh

@@ -73,6 +73,12 @@ public class Planet : MonoBehaviour, ICameraTarget
         {
             planetMeshFilters.water = new MeshFilter[6];
         }
+
+        if(transform.Find("Trees"))
+            DestroyImmediate(transform.Find("Trees").gameObject);
+
+        treeHolder = new GameObject("Trees");
+        treeHolder.transform.parent = transform;
         
         terrainFaces = new TerrainFace[6];
         waterFaces = new WaterFace[6];
@@ -83,7 +89,8 @@ public class Planet : MonoBehaviour, ICameraTarget
         {
             GenerateMeshBase(planetMeshFilters.terrain, i, directions, colorSettings.planetMaterial, "terrain");
 
-            terrainFaces[i] = new TerrainFace(waterGenerator, shapeGenerator, treeGenerator, planetMeshFilters.terrain[i].sharedMesh, resolution, directions[i], transform);
+            terrainFaces[i] = new TerrainFace(waterGenerator, shapeGenerator, treeGenerator, planetMeshFilters.terrain[i].sharedMesh, 
+                resolution, directions[i], transform, treeHolder.transform);
             bool renderTerrainFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
             planetMeshFilters.terrain[i].gameObject.SetActive(renderTerrainFace);
 
@@ -140,7 +147,6 @@ public class Planet : MonoBehaviour, ICameraTarget
         float waterElevation = waterGenerator.CalculateWaterElevation();
         treeGenerator.UpdateTreeLine(waterElevation, null);
     }
-
 
     public void GeneratePlanet()
     {
