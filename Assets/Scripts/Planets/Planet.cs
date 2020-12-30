@@ -50,6 +50,8 @@ public class Planet : MonoBehaviour, ICameraTarget
 
     PlanetMeshFilters planetMeshFilters;
 
+    Vector3 worldOrigin;
+
     private void OnValidate()
     {
         GeneratePlanet();
@@ -83,6 +85,8 @@ public class Planet : MonoBehaviour, ICameraTarget
         terrainFaces = new TerrainFace[6];
         waterFaces = new WaterFace[6];
 
+        worldOrigin = transform.position;
+
         Vector3[] directions = { Vector3.up, Vector3.down, Vector3.left, Vector3.right, Vector3.forward, Vector3.back };
 
         for (int i = 0; i < 6; i++)
@@ -90,7 +94,7 @@ public class Planet : MonoBehaviour, ICameraTarget
             GenerateMeshBase(planetMeshFilters.terrain, i, directions, colorSettings.planetMaterial, "terrain");
 
             terrainFaces[i] = new TerrainFace(waterGenerator, shapeGenerator, treeGenerator, planetMeshFilters.terrain[i].sharedMesh, 
-                resolution, directions[i], transform, treeHolder.transform);
+                resolution, directions[i], transform, treeHolder.transform, worldOrigin);
             bool renderTerrainFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
             planetMeshFilters.terrain[i].gameObject.SetActive(renderTerrainFace);
 

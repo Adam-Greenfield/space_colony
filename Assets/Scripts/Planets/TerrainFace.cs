@@ -11,13 +11,14 @@ public class TerrainFace
     Vector3 localUp;
     Vector3 axisA;
     Vector3 axisB;
+    Vector3 worldOrigin;
     Transform parentTransform;
     Transform treeHolder;
     System.Random random;
 
 
     public TerrainFace(WaterGenerator waterGenerator, ShapeGenerator shapeGenerator, TreeGenerator treeGenerator,
-        Mesh mesh, int resolution, Vector3 localUp, Transform parentTransform, Transform treeHolder)
+        Mesh mesh, int resolution, Vector3 localUp, Transform parentTransform, Transform treeHolder, Vector3 worldOrigin)
     {
         this.waterGenerator = waterGenerator;
         this.shapeGenerator = shapeGenerator;
@@ -27,6 +28,7 @@ public class TerrainFace
         this.localUp = localUp;
         this.parentTransform = parentTransform;
         this.treeHolder = treeHolder;
+        this.worldOrigin = worldOrigin;
         this.random = new System.Random();
 
         //get a perpendicular axis from local
@@ -69,7 +71,7 @@ public class TerrainFace
 
                 //add trees here
                 if (randomIndex % numOfTrees == 0)
-                    treeGenerator.InstantiateTrees(vertexPoint, elevation, treeHolder, shapeGenerator, waterElevation);
+                    treeGenerator.InstantiateTrees(vertexPoint, elevation, treeHolder, shapeGenerator, waterElevation, worldOrigin);
                                     
 
                 //don't do this for bottom and right face, as the triangles would extend out the mesh
