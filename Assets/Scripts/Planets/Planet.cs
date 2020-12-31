@@ -214,16 +214,17 @@ public class Planet : MonoBehaviour, ICameraTarget
     //TODO
     //Planet has resources: food, wood, water, ore. ore for technology wood for construction
 
-    //fix bug where planet duplicates terrain and water faces
-    //create stats for planet: health, resource amounts
+    //create stats for planet: health, resource amounts, that can be altered at both compile and run time
     //split the water mesh into water visual and available water
     //expand on the water and terrain shaders
     //implement building and feature placement by mouse
     //build the sun
     //implement orbits
-    //DONE skybox
     //implement skybox camera
-    //DONE create clusters of trees
     //let trees grow over time, and appear around the planet
     //create life (people walking about and chopping down trees, going in and out of buildings)
+
+    //DONE fix bug where planet duplicates terrain and water faces
+    //DONE create clusters of trees
+    //DONE skybox
 }
