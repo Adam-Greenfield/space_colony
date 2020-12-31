@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 public class TreeGenerator
@@ -10,7 +11,9 @@ public class TreeGenerator
 
     TreeSettings settings;
 
-    public readonly int[] clusterSequence = new int[] { 1,2,3,5,8,13,21,34,55,89 };
+    System.Random random = new System.Random();
+
+    public readonly int[] clusterSequence = new int[] { 1,2,3,5,8,13,21,34,55 };
 
     public void UpdateSettings(TreeSettings settings)
     {
@@ -33,10 +36,6 @@ public class TreeGenerator
     }
 
     //a forest is a blob of trees that can be farmed for wood
-    public void InstantiateForests()
-    {
-        //create a series of forests out of the individual trees
-    }
 
     public int GetInverseNumberOfTrees(int verticies)
     {
@@ -87,4 +86,23 @@ public class TreeGenerator
 
         return array;
     }
+
+    public int VertextIncrementor(int resolution, int size)
+    {
+        //bigger forests have less spacing
+        
+        //int c = (clusterSequence[clusterSequence.Length - 1] + 5 - size) / 6;
+        int c = 2;
+        int r = resolution * 2;
+
+        int magnitudeX = random.Next(2,10);
+        int magnitudeY = random.Next(2,10);
+
+        int resultX = c * magnitudeX;
+        int resultY = r * magnitudeY;
+
+        return resultX + resultY;
+
+    }
 }
+

@@ -31,6 +31,9 @@ public class Planet : MonoBehaviour, ICameraTarget
     [HideInInspector]
     public GameObject treeHolder;
 
+    [HideInInspector]
+    public GameObject landForms;
+
     private int _distanceFromCore;
 
     ColorGenerator colorGenerator = new ColorGenerator();
@@ -79,12 +82,18 @@ public class Planet : MonoBehaviour, ICameraTarget
             planetMeshFilters.water = new MeshFilter[6];
         }
 
-        if(transform.Find("Trees"))
-            DestroyImmediate(transform.Find("Trees").gameObject);
+        if(transform.Find("LandForms"))
+            DestroyImmediate(transform.Find("LandForms").gameObject);
+
+        landForms = new GameObject("LandForms");
+        landForms.transform.position = transform.position;
+        landForms.transform.parent = transform;
 
         treeHolder = new GameObject("Trees");
         treeHolder.transform.position = transform.position;
-        treeHolder.transform.parent = transform;
+        treeHolder.transform.parent = landForms.transform;
+
+
         
         terrainFaces = new TerrainFace[6];
         waterFaces = new WaterFace[6];
@@ -115,7 +124,7 @@ public class Planet : MonoBehaviour, ICameraTarget
         if(filters[i] == null)
         {
             GameObject meshObj = new GameObject(name);
-            meshObj.transform.parent = transform;
+            meshObj.transform.parent = landForms.transform;
             meshObj.transform.position = transform.position;
 
             meshObj.AddComponent<MeshRenderer>();
@@ -205,13 +214,16 @@ public class Planet : MonoBehaviour, ICameraTarget
     //TODO
     //Planet has resources: food, wood, water, ore. ore for technology wood for construction
 
-
+    //fix bug where planet duplicates terrain and water faces
     //create stats for planet: health, resource amounts
     //split the water mesh into water visual and available water
     //expand on the water and terrain shaders
     //implement building and feature placement by mouse
     //build the sun
     //implement orbits
-    //create clusters of trees, let trees grow over time, and appear around the planet
+    //DONE skybox
+    //implement skybox camera
+    //DONE create clusters of trees
+    //let trees grow over time, and appear around the planet
     //create life (people walking about and chopping down trees, going in and out of buildings)
 }

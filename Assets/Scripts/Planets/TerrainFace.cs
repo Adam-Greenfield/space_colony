@@ -44,6 +44,7 @@ public class TerrainFace
     {
         float waterElevation = waterGenerator.CalculateWaterElevation();
         Vector3[] verticies = new Vector3[resolution * resolution];
+        float[] elevationVerticies = new float[resolution * resolution];
         int numOfTrees = treeGenerator.GetInverseNumberOfTrees(resolution * resolution);
 
         int clusterSizeLength = treeGenerator.GetClusterSequenceLength();
@@ -68,6 +69,7 @@ public class TerrainFace
                 Vector3 pointOnUnitSphere = pointOnUnitCube.normalized;
                 //pass in delegate to do this
                 float elevation = shapeGenerator.CalculateElevation(pointOnUnitSphere);
+                elevationVerticies[i] = elevation;
                 Vector3 vertexPoint = shapeGenerator.CalculatePointOnPlanet(pointOnUnitSphere, elevation);
                 verticies[i] = vertexPoint;
 
@@ -77,28 +79,15 @@ public class TerrainFace
                 //  into the tree generator for every single tree 
                 if (numOfTrees != 0 && randomIndex % numOfTrees == 0)
                 {
-                    //add clusters depending on the settings
-
-                    //get cluster occurrence from the settings
-
-                    //1 cluster density is one tree each time, using fibonacci 1, 2, 3, 5, 8, 13, 21, 34, 55
-
-                    //each preceeding number should be three times as common as the next
-
-                    //so if cluster size is 3, it should go 1 1 1 2 2 3 1 1 1 2 2 3
-                    //index: 0 0 0 1 1 2
-                    //size: 3
-                    //length: 6
-                    //index start: 0 1 2 3 4 5
-                    int vertexSpiral = i;
                     for (int a = 0; a < clusterSequenceMapped[clusterIndex]; a++)
                     {
-                        
-                        //Debug.Log(clusterSequenceMapped[clusterIndex]);
+                        //get a number to add tothe index for a nice forest distribution
+                        int vertexIncrement = treeGenerator.VertextIncrementor(resolution, clusterSequenceMapped[clusterIndex]);
+                        int vertexIndex = Mathf.Clamp(i - vertexIncrement, 0, (resolution * resolution) - 1);
+                        Vector3 treeTarget = verticies[vertexIndex];
                         //get random verticies around the tree
-                        int randomTreePlacement = this.random.Next(i - (50), i + (50));
-                        treeGenerator.InstantiateTrees(verticies[Mathf.Clamp(randomTreePlacement, 0, (resolution * resolution) - 1)],
-                            elevation, treeHolder, shapeGenerator, waterElevation, worldOrigin);
+                        //int randomTreePlacement = this.random.Next(i - (50), i + (50));
+                        treeGenerator.InstantiateTrees(verticies[vertexIndex], elevationVerticies[vertexIndex], treeHolder, shapeGenerator, waterElevation, worldOrigin);
                     }
 
                     clusterIndex ++;
