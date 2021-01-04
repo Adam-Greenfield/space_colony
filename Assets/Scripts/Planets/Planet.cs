@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Planet : MonoBehaviour, ICameraTarget
+public class Planet : MonoBehaviour, ICameraTarget, IPrimary
 {
     [Range(2,256)]
     public int resolution = 10;
@@ -11,16 +11,31 @@ public class Planet : MonoBehaviour, ICameraTarget
     public enum FaceRenderMask { All, Top, Bottom, Left, Right, Front, Back }
     public FaceRenderMask faceRenderMask;
 
-    public ShapeSettings shapeSettings;
+    public float gravitationalPull { get { return _gravitationalPull; } set { _gravitationalPull = value; } }
+
+    [SerializeField]
+    float _gravitationalPull;
+
+    #region settings
+    public AnimalSettings animalSettings;
     public ColorSettings colorSettings;
-    public WaterSettings waterSettings;
+    public OrbitSettings orbitSettings;
+    public ShapeSettings shapeSettings;
     public TreeSettings treeSettings;
+    public WaterSettings waterSettings;
+    #endregion
+
+
+    [HideInInspector]
+    public bool animalSettingsFoldout;
 
     [HideInInspector]
     public bool shapeSettingsFoldout;
 
     [HideInInspector]
     public bool colorSettingsFoldout;
+    [HideInInspector]
+    public bool orbitSettingsFoldout;
 
     [HideInInspector]
     public bool waterSettingsFoldout;
@@ -33,20 +48,24 @@ public class Planet : MonoBehaviour, ICameraTarget
 
     [HideInInspector]
     public GameObject landForms;
+    public GameObject primary;
 
+    OrbitManager orbitManager;
+    PlanetManager planetManager;
+
+    public int distanceFromCore { get { return _distanceFromCore; } set { _distanceFromCore = value; } }
     private int _distanceFromCore;
 
+    public AnimalGenerator animalGenerator { get; private set; } = new AnimalGenerator();
     ColorGenerator colorGenerator = new ColorGenerator();
     ShapeGenerator shapeGenerator = new ShapeGenerator();
     WaterGenerator waterGenerator = new WaterGenerator();
-    TreeGenerator treeGenerator = new TreeGenerator();
+    public TreeGenerator treeGenerator { get; private set; } = new TreeGenerator();
 
     [SerializeField, HideInInspector]
-
-    TerrainFace[] terrainFaces;
+    public TerrainFace[] terrainFaces { get; private set; }
     WaterVisibleFace[] waterVisibleFaces;
     WaterAccessableFace[] waterAccessableFaces;
-
 
 
     struct PlanetMeshFilters
@@ -65,16 +84,31 @@ public class Planet : MonoBehaviour, ICameraTarget
         GeneratePlanet();
     }
 
-    protected virtual void Awake() {}
-
-    public int distanceFromCore { get { return _distanceFromCore; } set { _distanceFromCore = value; } }
-
-    void Initialize()
+    protected virtual void Awake()
     {
+        GeneratePlanet();
+    }
+
+
+    bool Initialize()
+    {
+        planetManager = gameObject.GetComponent<PlanetManager>() 
+            ?? gameObject.AddComponent(typeof(PlanetManager)) as PlanetManager;
+
+        orbitManager = gameObject.GetComponent<OrbitManager>()
+            ?? gameObject.AddComponent(typeof(OrbitManager)) as OrbitManager;
+
+
+        animalGenerator.UpdateSettings(animalSettings);
         colorGenerator.UpdateSettings(colorSettings);
+        orbitManager.UpdateSettings(orbitSettings, primary);
         shapeGenerator.UpdateSettings(shapeSettings);
         waterGenerator.UpdateSettings(waterSettings);
         treeGenerator.UpdateSettings(treeSettings);
+
+        planetManager.treeCount = 0;
+
+        treeGenerator.planetManager = planetManager;
 
         if (planetMeshFilters.terrain == null || planetMeshFilters.terrain.Length == 0)
         {
@@ -131,6 +165,8 @@ public class Planet : MonoBehaviour, ICameraTarget
             bool renderWaterVisibleFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
             planetMeshFilters.waterVisible[i].gameObject.SetActive(renderWaterVisibleFace);
         }
+
+        return true;
     }
 
     private void GenerateMeshRendererBase(MeshFilter[] filters, int i, string name, Material material)
@@ -173,6 +209,7 @@ public class Planet : MonoBehaviour, ICameraTarget
         }
         colorGenerator.UpdateElevation(shapeGenerator.elevationMinMax);
         treeGenerator.UpdateTreeLine(null, shapeGenerator.elevationMinMax.Max);
+        planetManager.CalculateMaxTrees();
     }
 
     void GenerateColor()
@@ -207,18 +244,31 @@ public class Planet : MonoBehaviour, ICameraTarget
 
     public void GeneratePlanet()
     {
-        Initialize();
-        GenerateTerrain();
-        GenerateColor();
-        GenerateWater();
+        if (Initialize())
+        {
+            GenerateTerrain();
+            GenerateColor();
+            GenerateWater();
+            orbitManager.SetRange();
+            //planetManager.SpawnAnimals();
+        }
+    }
+
+    public void OnAnimalSettingsUpdated()
+    {
+        if (autoUpdate)
+        {
+            if(Initialize())
+                GenerateTerrain();
+        }
     }
 
     public void OnShapeSettingsUpdated()
     {
         if (autoUpdate)
         {
-            Initialize();
-            GenerateTerrain();
+            if(Initialize())
+                GenerateTerrain();
         }
     }
 
@@ -226,8 +276,17 @@ public class Planet : MonoBehaviour, ICameraTarget
     {
         if (autoUpdate)
         {
-            Initialize();
-            GenerateColor();
+            if(Initialize())
+                GenerateColor();
+        }
+    }
+
+    public void OnOrbitSettingsUpdated()
+    {
+        if (autoUpdate)
+        {
+            if(Initialize())
+                GeneratePlanet();
         }
     }
 
@@ -235,9 +294,11 @@ public class Planet : MonoBehaviour, ICameraTarget
     {
         if (autoUpdate)
         {
-            Initialize();
-            GenerateTerrain();
-            GenerateWater();
+            if (Initialize())
+            {
+                GenerateTerrain();
+                GenerateWater();
+            }
         }
     }
 
@@ -245,27 +306,43 @@ public class Planet : MonoBehaviour, ICameraTarget
     {
         if (autoUpdate)
         {
-            Initialize();
-            GenerateTerrain();
+            if (Initialize())
+                GenerateTerrain();
         }
     }
+
+    //ORBIT! options: 1 do in update
+
+    //orbit will have to have a center point
+    //orbit will be elliptical
+    //planets and ships will orbit
+    //planets will rotate as they orbit
+    //the further away a planet is, the faster it will orbit
+    //an object will orbit round a primary, which will at the moment just be a gameobject
 
 
     //TODO
     //Planet has resources: food, wood, water, ore. ore for technology wood for construction
 
     //create stats for planet: health, resource amounts, that can be altered at both compile and run time
-    //split the water mesh into water visual and available water
+    //create food sources - fish and food bushes
     //expand on the water and terrain shaders
     //implement building and feature placement by mouse
-    //build the sun
     //implement orbits
     //implement skybox camera
-    //let trees grow over time, and appear around the planet
+    //Create rivers wiggling through verticies
+    //grow new trees in forest formation
+    //create places for ore
     //create life (people walking about and chopping down trees, going in and out of buildings)
 
+    //DONE build the sun
+    //DONE let trees grow over time
+    //DONE have trees appear around the planet
+    //DONE split the water mesh into water visual and available water
     //DONE fix bug where planet duplicates terrain and water faces
     //DONE create clusters of trees
     //DONE skybox
+    //DONE sort out terrain base color (set material repeat mode to clamp)
+    //DONE rudimentary orbits
 
 }

@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planetRadius: 4
   elevation: 16
-  waterMaterial: {fileID: 2100000, guid: 43e3261a7b90a0bccab26f57e34cf71e, type: 2}
+  waterVisibleMaterial: {fileID: 2100000, guid: 3b03f5128f9424cd0baefba5653ca341,
+    type: 2}

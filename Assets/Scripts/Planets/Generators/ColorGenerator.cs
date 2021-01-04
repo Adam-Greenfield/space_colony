@@ -29,6 +29,7 @@ public class ColorGenerator
         }
 
         texture.SetPixels(colors);
+        texture.wrapMode = TextureWrapMode.Clamp;
         texture.Apply();
         settings.planetMaterial.SetTexture("_texture", texture);
     }

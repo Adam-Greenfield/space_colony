@@ -14,19 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gradient:
     serializedVersion: 2
-    key0: {r: 0.6646238, g: 0.7169812, b: 0.32128873, a: 1}
-    key1: {r: 0.43038347, g: 0.62352943, b: 0.15686274, a: 1}
-    key2: {r: 0.31132078, g: 0.252581, b: 0.252581, a: 1}
-    key3: {r: 1, g: 1, b: 1, a: 1}
-    key4: {r: 0.31132078, g: 0.252581, b: 0.252581, a: 0}
+    key0: {r: 0.43752652, g: 0.6698113, b: 0.37281948, a: 1}
+    key1: {r: 0.6646238, g: 0.7169812, b: 0.32128873, a: 1}
+    key2: {r: 0.43038347, g: 0.62352943, b: 0.15686274, a: 1}
+    key3: {r: 0.31132078, g: 0.252581, b: 0.252581, a: 1}
+    key4: {r: 1, g: 1, b: 1, a: 0}
     key5: {r: 0, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 1928
-    ctime1: 16962
-    ctime2: 29491
-    ctime3: 49922
-    ctime4: 49922
+    ctime0: 771
+    ctime1: 1928
+    ctime2: 16962
+    ctime3: 29491
+    ctime4: 59174
     ctime5: 0
     ctime6: 0
     ctime7: 0
@@ -39,6 +39,6 @@ MonoBehaviour:
     atime6: 0
     atime7: 0
     m_Mode: 0
-    m_NumColorKeys: 4
+    m_NumColorKeys: 5
     m_NumAlphaKeys: 2
   planetMaterial: {fileID: 2100000, guid: c303efbf3cdf6c0fcb69bfd01ce71182, type: 2}

@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c038b70d5c8eb085a086b31cef6ad15, type: 3}
   m_Name: Planet1Trees
   m_EditorClassIdentifier: 
-  intensity: 8
-  maxClusterSize: 1
+  intensity: 5
+  maxClusterSize: 3
   treeLineElevationPercent: 0.9
-  treeModel: {fileID: 4528161140223803936, guid: 3df02fa0c126f91c6ac67c15bdca32f1,
-    type: 3}
+  treeModels:
+  - {fileID: 4528161140223803936, guid: 3df02fa0c126f91c6ac67c15bdca32f1, type: 3}
+  - {fileID: 4528161140223803936, guid: 4b6e630cdbf59491c8baa213c497de52, type: 3}

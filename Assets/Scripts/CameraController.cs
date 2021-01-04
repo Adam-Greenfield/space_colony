@@ -12,6 +12,13 @@ public class CameraController : MonoBehaviour
     float inputTimer = 5f;
     public float nearClipPlane = 0.01f;
 
+    float cameraDistanceMax = 60f;
+    float cameraDistanceMin = 10f;
+    public float cameraDistance = 20f;
+    float scrollSpeed = 5;
+    float noScrollDistance;
+    public Vector3 offset = new Vector3(0,0,1);
+
 
     bool transitioningMove = false;
     bool transitioningLook = false;
@@ -35,6 +42,10 @@ public class CameraController : MonoBehaviour
     {
         inputTimer += Time.deltaTime;
 
+        cameraDistance += Input.GetAxis("Mouse ScrollWheel") * scrollSpeed;
+        cameraDistance = Mathf.Clamp(cameraDistance, cameraDistanceMin, cameraDistanceMax);
+
+
         //modify the distance by the planets radius
 
         if (Input.GetKeyDown("d"))
@@ -50,7 +61,7 @@ public class CameraController : MonoBehaviour
             SetTotarget(targetTransforms[index + 1]);
         }
 
-        if (Input.GetMouseButton(2))
+        if (Input.GetMouseButton(1))
         {
             inputTimer = 0;
 
@@ -61,6 +72,7 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
+        Vector3 rotationTarget = new Vector3(0,0,0);
 
         float sizeFactor = transform.parent.transform.localScale.x / 10;
 
@@ -69,12 +81,17 @@ public class CameraController : MonoBehaviour
         if (!transitioningLook)
             transform.LookAt(transform.parent.transform.position);
 
-        if (inputTimer <= 5f)
-            return;
-
-        if (!transitioningMove)
+        if (!transitioningMove && inputTimer >= 5f)
+        {
             transform.RotateAround(transform.parent.transform.position, Vector3.up, rotationSpeed * Time.deltaTime);
-        
+        }
+
+        if (!transitioningLook && !transitioningMove)
+        {
+            Vector3 delta = transform.position - transform.parent.transform.position;
+            //delta.y = 0; // Keep same Y level
+            transform.position = transform.parent.transform.position + delta.normalized * cameraDistance;
+        }
     }
 
 
@@ -175,6 +192,7 @@ public class CameraController : MonoBehaviour
 
         transform.localPosition = localTargetPosition;
         transitioningMove = false;
+        noScrollDistance = Vector3.Distance(target.position, transform.position);
     }
 
     private Vector3 GetRotationalLocalPosition(Vector3 point, Vector3 axis, float angle)

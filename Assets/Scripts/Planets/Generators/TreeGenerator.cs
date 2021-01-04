@@ -1,15 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 
 public class TreeGenerator
 {
-
     public float treeLineMin;
     public float treeLineMax;
 
+    public PlanetManager planetManager;
+
     TreeSettings settings;
+
+    int treeVariety;
 
     System.Random random = new System.Random();
 
@@ -18,24 +22,31 @@ public class TreeGenerator
     public void UpdateSettings(TreeSettings settings)
     {
         this.settings = settings;
+        this.treeVariety = settings.treeModels.Length;
     }
 
-    //trees appear randomly about the planet for decoration
-    public void InstantiateTrees(Vector3 vertex, float elevation, Transform treeHolderTransform, ShapeGenerator shapeGenerator, float waterElevation, Vector3 worldOrigin)
+    public void InstantiateTree(Vector3 vertex, float elevation, Transform treeHolderTransform, float waterElevation, Vector3 worldOrigin)
     {
-        //TODO check elevation > waterElevation
+        // if (settings.treeModels.Length == 0)
+        //     throw new Exception("No tree models have been set");
+
+        int varietyIndex = random.Next(treeVariety);
+
         if( elevation < treeLineMax && elevation > waterElevation)
         {
-            GameObject tree = GameObject.Instantiate(settings.treeModel, vertex + worldOrigin, Quaternion.identity) as GameObject;
-            tree.transform.LookAt(worldOrigin);
-            tree.transform.rotation *= Quaternion.Euler(270, 0, 0);
-            tree.transform.parent = treeHolderTransform;
-        }
-        //randomly spread about individual tree assets
-        //collect positions and rotations to instantiate trees in
-    }
+            GameObject treeGO = GameObject.Instantiate(settings.treeModels[varietyIndex], vertex + worldOrigin, Quaternion.identity) as GameObject;
+            treeGO.transform.LookAt(worldOrigin);
+            treeGO.transform.rotation *= Quaternion.Euler(270, 0, 0);
+            treeGO.transform.parent = treeHolderTransform;
 
-    //a forest is a blob of trees that can be farmed for wood
+            _Tree tree = treeGO.GetComponent<_Tree>();
+            tree.defaultScale = treeGO.transform.localScale;
+            tree.Age = random.Next(1,5);
+            tree.SetStartingScale();
+
+            planetManager.treeCount += 1;
+        }
+    }
 
     public int GetInverseNumberOfTrees(int verticies)
     {
@@ -87,13 +98,10 @@ public class TreeGenerator
         return array;
     }
 
-    public int VertextIncrementor(int resolution, int size)
+    public int VertextIncrementor(int resolution)
     {
-        //bigger forests have less spacing
-        
-        //int c = (clusterSequence[clusterSequence.Length - 1] + 5 - size) / 6;
-        int c = 2;
-        int r = resolution * 2;
+        int c = 4;
+        int r = resolution * 4;
 
         int magnitudeX = random.Next(2,10);
         int magnitudeY = random.Next(2,10);

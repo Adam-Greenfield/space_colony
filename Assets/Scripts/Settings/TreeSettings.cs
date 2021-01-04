@@ -15,6 +15,5 @@ public class TreeSettings : ScriptableObject
     [Range(0,1)]
     public float treeLineElevationPercent;
 
-    public GameObject treeModel;
-
+    public GameObject[] treeModels; 
 }

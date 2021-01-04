@@ -3,17 +3,19 @@ using System.Collections;
 
 public class TerrainFace
 {
-    WaterGenerator waterGenerator;
+    public Vector3[] verticies { get; private set; }
+    public float[] elevationVerticies { get; private set; }
+    public Mesh mesh { get; private set; }
+    public Transform treeHolder { get; private set; }
+    public WaterGenerator waterGenerator { get; private set; }
     ShapeGenerator shapeGenerator;
     TreeGenerator treeGenerator;
-    public Mesh mesh { get; private set; }
     int resolution;
     Vector3 localUp;
     Vector3 axisA;
     Vector3 axisB;
-    Vector3 worldOrigin;
+    public Vector3 worldOrigin { get; private set; }
     Transform parentTransform;
-    Transform treeHolder;
     System.Random random;
 
 
@@ -43,8 +45,8 @@ public class TerrainFace
     public void ConstructMesh()
     {
         float waterElevation = waterGenerator.CalculateWaterElevation();
-        Vector3[] verticies = new Vector3[resolution * resolution];
-        float[] elevationVerticies = new float[resolution * resolution];
+        verticies = new Vector3[resolution * resolution];
+        elevationVerticies = new float[resolution * resolution];
         int numOfTrees = treeGenerator.GetInverseNumberOfTrees(resolution * resolution);
 
         int clusterSizeLength = treeGenerator.GetClusterSequenceLength();
@@ -82,12 +84,12 @@ public class TerrainFace
                     for (int a = 0; a < clusterSequenceMapped[clusterIndex]; a++)
                     {
                         //get a number to add tothe index for a nice forest distribution
-                        int vertexIncrement = treeGenerator.VertextIncrementor(resolution, clusterSequenceMapped[clusterIndex]);
+                        int vertexIncrement = treeGenerator.VertextIncrementor(resolution);
                         int vertexIndex = Mathf.Clamp(i - vertexIncrement, 0, (resolution * resolution) - 1);
                         Vector3 treeTarget = verticies[vertexIndex];
                         //get random verticies around the tree
                         //int randomTreePlacement = this.random.Next(i - (50), i + (50));
-                        treeGenerator.InstantiateTrees(verticies[vertexIndex], elevationVerticies[vertexIndex], treeHolder, shapeGenerator, waterElevation, worldOrigin);
+                        treeGenerator.InstantiateTree(verticies[vertexIndex], elevationVerticies[vertexIndex], treeHolder, waterElevation, worldOrigin);
                     }
 
                     clusterIndex ++;

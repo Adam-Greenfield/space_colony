@@ -38,6 +38,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Editor\ConditionalHidePropertyDrawer.cs" />
      <Compile Include="Assets\Scripts\Editor\PlanetEditor.cs" />
+     <Compile Include="Assets\Scripts\External\ClassTypeReference\Editor\ClassTypeReferencePropertyDrawer.cs" />
     <Reference Include="UnityEngine">
         <HintPath>/home/adam/Unity/Hub/Editor/2019.4.13f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

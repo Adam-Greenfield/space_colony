@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d686055938a23c0cfb1b78b580f6f009, type: 3}
+  m_Name: Planet2Animals
+  m_EditorClassIdentifier: 
+  species:
+  - animalType:
+      _classRef: Mamal, Assembly-CSharp
+    speciesName: Rabbit
+    population: 8
+    model: {fileID: 1193930280683100039, guid: 8b30dbf3bb65e87f8a1cecc9a0d60ec9, type: 3}

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Planet2Trees
   m_EditorClassIdentifier: 
   intensity: 0
+  maxClusterSize: 0
   treeLineElevationPercent: 1
-  treeModel: {fileID: 4528161140223803936, guid: 3df02fa0c126f91c6ac67c15bdca32f1,
-    type: 3}
+  treeModels:
+  - {fileID: 4528161140223803936, guid: 3df02fa0c126f91c6ac67c15bdca32f1, type: 3}

@@ -18,7 +18,7 @@ public class WaterAccessableFace
         this.waterGenerator = waterGenerator;
 
         this.mesh = mesh;
-        this.resolution = resolution;
+        this.resolution = resolution / 5;
         this.localUp = localUp;
 
         //get a perpendicular axis from local

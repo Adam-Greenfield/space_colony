@@ -7,8 +7,10 @@ using UnityEngine;
 public class PlanetEditor : Editor
 {
 
+    Editor animalEditor;
     Editor shapeEditor;
     Editor colorEditor;
+    Editor orbitEditor;
     Editor waterEditor;
     Editor treeEditor;
     Planet planet;
@@ -27,8 +29,10 @@ public class PlanetEditor : Editor
                 planet.GeneratePlanet();
 
 
-        DrawSettingsEditor(planet.shapeSettings, planet.OnShapeSettingsUpdated, ref planet.shapeSettingsFoldout, ref shapeEditor);
+        DrawSettingsEditor(planet.animalSettings, planet.OnAnimalSettingsUpdated, ref planet.animalSettingsFoldout, ref animalEditor);
         DrawSettingsEditor(planet.colorSettings, planet.OnColorSettingsUpdated, ref planet.colorSettingsFoldout, ref colorEditor);
+        DrawSettingsEditor(planet.orbitSettings, planet.OnOrbitSettingsUpdated, ref planet.orbitSettingsFoldout, ref orbitEditor);
+        DrawSettingsEditor(planet.shapeSettings, planet.OnShapeSettingsUpdated, ref planet.shapeSettingsFoldout, ref shapeEditor);
         DrawSettingsEditor(planet.waterSettings, planet.OnWaterSettingsUpdated, ref planet.waterSettingsFoldout, ref waterEditor);
         DrawSettingsEditor(planet.treeSettings, planet.OnTreeSettingsUpdated, ref planet.treeSettingsFoldout, ref treeEditor);
         

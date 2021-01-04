@@ -36,27 +36,40 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Animals\Animal.cs" />
+     <Compile Include="Assets\Scripts\Animals\Fish.cs" />
+     <Compile Include="Assets\Scripts\Animals\Mamal.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\ConditionalHideAttribute.cs" />
+     <Compile Include="Assets\Scripts\External\ClassTypeReference\ClassTypeConstraintAttribute.cs" />
+     <Compile Include="Assets\Scripts\External\ClassTypeReference\ClassTypeReference.cs" />
      <Compile Include="Assets\Scripts\ICameraTarget.cs" />
      <Compile Include="Assets\Scripts\INoiseFilter.cs" />
+     <Compile Include="Assets\Scripts\IPrimary.cs" />
+     <Compile Include="Assets\Scripts\Managers\OrbitManager.cs" />
+     <Compile Include="Assets\Scripts\Managers\PlanetManager.cs" />
+     <Compile Include="Assets\Scripts\Managers\PrimaryManager.cs" />
      <Compile Include="Assets\Scripts\Noise.cs" />
      <Compile Include="Assets\Scripts\NoiseFilterFactory.cs" />
+     <Compile Include="Assets\Scripts\Planets\Generators\AnimalGenerator.cs" />
      <Compile Include="Assets\Scripts\Planets\Generators\ColorGenerator.cs" />
      <Compile Include="Assets\Scripts\Planets\Generators\ShapeGenerator.cs" />
      <Compile Include="Assets\Scripts\Planets\Generators\TreeGenerator.cs" />
      <Compile Include="Assets\Scripts\Planets\Generators\WaterGenerator.cs" />
      <Compile Include="Assets\Scripts\Planets\MinMax.cs" />
      <Compile Include="Assets\Scripts\Planets\Planet.cs" />
-     <Compile Include="Assets\Scripts\Planets\Settings\ColorSettings.cs" />
-     <Compile Include="Assets\Scripts\Planets\Settings\NoiseSettings.cs" />
-     <Compile Include="Assets\Scripts\Planets\Settings\ShapeSettings.cs" />
-     <Compile Include="Assets\Scripts\Planets\Settings\TreeSettings.cs" />
-     <Compile Include="Assets\Scripts\Planets\Settings\WaterSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\TerrainFace.cs" />
      <Compile Include="Assets\Scripts\Planets\WaterAccessableFace.cs" />
      <Compile Include="Assets\Scripts\Planets\WaterVisibleFace.cs" />
+     <Compile Include="Assets\Scripts\Resources\_Tree.cs" />
      <Compile Include="Assets\Scripts\RigidNoiseFilter.cs" />
+     <Compile Include="Assets\Scripts\Settings\AnimalSettings.cs" />
+     <Compile Include="Assets\Scripts\Settings\ColorSettings.cs" />
+     <Compile Include="Assets\Scripts\Settings\NoiseSettings.cs" />
+     <Compile Include="Assets\Scripts\Settings\OrbitSettings.cs" />
+     <Compile Include="Assets\Scripts\Settings\ShapeSettings.cs" />
+     <Compile Include="Assets\Scripts\Settings\TreeSettings.cs" />
+     <Compile Include="Assets\Scripts\Settings\WaterSettings.cs" />
      <Compile Include="Assets\Scripts\SimpleNoiseFilter.cs" />
      <Compile Include="Assets\Scripts\SystemGenerator.cs" />
     <Reference Include="UnityEngine">
