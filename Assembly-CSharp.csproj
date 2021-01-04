@@ -54,7 +54,8 @@
      <Compile Include="Assets\Scripts\Planets\Settings\TreeSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\Settings\WaterSettings.cs" />
      <Compile Include="Assets\Scripts\Planets\TerrainFace.cs" />
-     <Compile Include="Assets\Scripts\Planets\WaterFace.cs" />
+     <Compile Include="Assets\Scripts\Planets\WaterAccessableFace.cs" />
+     <Compile Include="Assets\Scripts\Planets\WaterVisibleFace.cs" />
      <Compile Include="Assets\Scripts\RigidNoiseFilter.cs" />
      <Compile Include="Assets\Scripts\SimpleNoiseFilter.cs" />
      <Compile Include="Assets\Scripts\SystemGenerator.cs" />

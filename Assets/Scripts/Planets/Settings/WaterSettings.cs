@@ -7,5 +7,6 @@ public class WaterSettings : ScriptableObject
 {
     public float planetRadius = 1;
     public float elevation;
-    public Material waterMaterial;
+    public Material waterVisibleMaterial;
+    public Material waterAccessableMaterial;
 }

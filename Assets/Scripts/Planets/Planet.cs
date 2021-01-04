@@ -44,12 +44,16 @@ public class Planet : MonoBehaviour, ICameraTarget
     [SerializeField, HideInInspector]
 
     TerrainFace[] terrainFaces;
-    WaterFace[] waterFaces;
+    WaterVisibleFace[] waterVisibleFaces;
+    WaterAccessableFace[] waterAccessableFaces;
+
+
 
     struct PlanetMeshFilters
     {
         public MeshFilter[] terrain;
-        public MeshFilter[] water;
+        public MeshFilter[] waterVisible;
+        public MeshFilter[] waterAccessable;
     }
 
     PlanetMeshFilters planetMeshFilters;
@@ -77,9 +81,14 @@ public class Planet : MonoBehaviour, ICameraTarget
             planetMeshFilters.terrain = new MeshFilter[6];
         }
 
-        if (planetMeshFilters.water == null || planetMeshFilters.water.Length == 0)
+        if (planetMeshFilters.waterVisible == null || planetMeshFilters.waterVisible.Length == 0)
         {
-            planetMeshFilters.water = new MeshFilter[6];
+            planetMeshFilters.waterVisible = new MeshFilter[6];
+        }
+
+        if (planetMeshFilters.waterAccessable == null || planetMeshFilters.waterAccessable.Length == 0)
+        {
+            planetMeshFilters.waterAccessable = new MeshFilter[6];
         }
 
         if(transform.Find("LandForms"))
@@ -92,11 +101,10 @@ public class Planet : MonoBehaviour, ICameraTarget
         treeHolder = new GameObject("Trees");
         treeHolder.transform.position = transform.position;
         treeHolder.transform.parent = landForms.transform;
-
-
         
         terrainFaces = new TerrainFace[6];
-        waterFaces = new WaterFace[6];
+        waterAccessableFaces = new WaterAccessableFace[6];
+        waterVisibleFaces = new WaterVisibleFace[6];
 
         worldOrigin = transform.position;
 
@@ -104,22 +112,28 @@ public class Planet : MonoBehaviour, ICameraTarget
 
         for (int i = 0; i < 6; i++)
         {
-            GenerateMeshBase(planetMeshFilters.terrain, i, directions, colorSettings.planetMaterial, "terrain");
+            GenerateMeshRendererBase(planetMeshFilters.terrain, i, "terrain", colorSettings.planetMaterial);
 
             terrainFaces[i] = new TerrainFace(waterGenerator, shapeGenerator, treeGenerator, planetMeshFilters.terrain[i].sharedMesh, 
                 resolution, directions[i], transform, treeHolder.transform, worldOrigin);
             bool renderTerrainFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
             planetMeshFilters.terrain[i].gameObject.SetActive(renderTerrainFace);
 
-            GenerateMeshBase(planetMeshFilters.water, i, directions, waterSettings.waterMaterial, "water");
+            GenerateMeshColliderBase(planetMeshFilters.waterAccessable, i, "water_accessable");
 
-            waterFaces[i] = new WaterFace(waterGenerator, shapeGenerator, planetMeshFilters.water[i].sharedMesh, resolution, directions[i]);
-            bool renderWaterFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
-            planetMeshFilters.water[i].gameObject.SetActive(renderWaterFace);
+            waterAccessableFaces[i] = new WaterAccessableFace(waterGenerator, shapeGenerator, planetMeshFilters.waterAccessable[i].sharedMesh, resolution, directions[i]);
+            bool renderWaterAccessableFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
+            planetMeshFilters.waterAccessable[i].gameObject.SetActive(renderWaterAccessableFace);
+            
+            GenerateMeshRendererBase(planetMeshFilters.waterVisible, i, "water_visible", waterSettings.waterVisibleMaterial);
+
+            waterVisibleFaces[i] = new WaterVisibleFace(waterGenerator, planetMeshFilters.waterVisible[i].sharedMesh, resolution, directions[i]);
+            bool renderWaterVisibleFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
+            planetMeshFilters.waterVisible[i].gameObject.SetActive(renderWaterVisibleFace);
         }
     }
 
-    private void GenerateMeshBase(MeshFilter[] filters, int i, Vector3[] directions, Material material, string name)
+    private void GenerateMeshRendererBase(MeshFilter[] filters, int i, string name, Material material)
     {
         if(filters[i] == null)
         {
@@ -133,6 +147,21 @@ public class Planet : MonoBehaviour, ICameraTarget
         }
 
         filters[i].GetComponent<MeshRenderer>().sharedMaterial = material;
+    }
+
+    private void GenerateMeshColliderBase(MeshFilter[] filters, int i, string name)
+    {
+        if(filters[i] == null)
+        {
+            GameObject meshObj = new GameObject(name);
+            meshObj.transform.parent = landForms.transform;
+            meshObj.transform.position = transform.position;
+
+            meshObj.AddComponent<MeshCollider>();
+            filters[i] = meshObj.AddComponent<MeshFilter>();
+
+            filters[i].sharedMesh = new Mesh();
+        }
     }
 
     void GenerateTerrain()
@@ -155,10 +184,21 @@ public class Planet : MonoBehaviour, ICameraTarget
     {
         for (int i = 0; i < 6; i++)
         {
-            if(planetMeshFilters.water[i].gameObject.activeSelf)
+            if(planetMeshFilters.waterVisible[i].gameObject.activeSelf)
             {
-                waterFaces[i].ConstructMesh();
-                waterFaces[i].UpdateUVs();
+                waterVisibleFaces[i].ConstructMesh();
+                waterVisibleFaces[i].UpdateUVs();
+            }
+            
+            if(planetMeshFilters.waterAccessable[i].gameObject.activeSelf)
+            {
+                waterAccessableFaces[i].ConstructMesh();
+                waterAccessableFaces[i].UpdateUVs();
+
+                planetMeshFilters.waterAccessable[i].gameObject.GetComponent<MeshCollider>().sharedMesh = null;
+                planetMeshFilters.waterAccessable[i].gameObject.GetComponent<MeshCollider>().sharedMesh =
+                    planetMeshFilters.waterAccessable[i].gameObject.GetComponent<MeshFilter>().sharedMesh;
+
             }
         }
         float waterElevation = waterGenerator.CalculateWaterElevation();
@@ -227,4 +267,5 @@ public class Planet : MonoBehaviour, ICameraTarget
     //DONE fix bug where planet duplicates terrain and water faces
     //DONE create clusters of trees
     //DONE skybox
+
 }

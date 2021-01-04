@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaterFace
+public class WaterAccessableFace
 {
     WaterGenerator waterGenerator;
     ShapeGenerator shapeGenerator;
@@ -11,7 +11,8 @@ public class WaterFace
     Vector3 localUp;
     Vector3 axisA;
     Vector3 axisB;
-    public WaterFace(WaterGenerator waterGenerator, ShapeGenerator shapeGenerator, Mesh mesh, int resolution, Vector3 localUp)
+
+    public WaterAccessableFace(WaterGenerator waterGenerator, ShapeGenerator shapeGenerator, Mesh mesh, int resolution, Vector3 localUp)
     {
         this.shapeGenerator = shapeGenerator;
         this.waterGenerator = waterGenerator;
@@ -25,7 +26,6 @@ public class WaterFace
         //get cross product of local and a, results in normal to local and a
         axisB = Vector3.Cross(localUp, axisA);
     }
-
         
 
     public void UpdateUVs()
@@ -68,7 +68,6 @@ public class WaterFace
                 float terrainElevationComparitor = shapeGenerator.CalculateElevation(pointOnUnitSphere);
                 if(elevation > terrainElevationComparitor)
                     verticies[i] = pointOnPlanet;
-                
             }
         }
 
@@ -155,6 +154,7 @@ public class WaterFace
         mesh.vertices = verticies;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
+        mesh.RecalculateBounds(); 
     }
 
 }
